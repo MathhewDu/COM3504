@@ -10,7 +10,7 @@ const SNOWY = 4;
  * called by the HTML onload
  * showing any cached forecast data and declaring the service worker
  */
-function initWeatherForecasts() {
+function initImageSystem() {
     //check for support
     if ('indexedDB' in window) {
         initDatabase();
@@ -27,9 +27,9 @@ function initWeatherForecasts() {
  * @param forceReload true if the data is to be loaded from the server
  */
 function loadData(forceReload){
-    var cityList=JSON.parse(localStorage.getItem('cities'));
-    cityList=removeDuplicates(cityList);
-    retrieveAllCitiesData(cityList, new Date().getTime(), forceReload);
+    var imageLIst=JSON.parse(localStorage.getItem('author'));
+    imagelist=removeDuplicates(imagelist);
+    retrieveAllCitiesData(imagelist, forceReload);
 }
 
 /**
@@ -39,10 +39,10 @@ function loadData(forceReload){
  * @param date the date for the forecasts (not in use)
  * @param forceReload true if the data is to be retrieved from the server
  */
-function retrieveAllCitiesData(cityList, date, forceReload){
+function retrieveAllCitiesData(imageList, date, forceReload){
     refreshCityList();
-    for (let index in cityList)
-        loadCityData(cityList[index], date, forceReload);
+    for (let index in imagelist)
+        loadImageData(imagelist[index], forceReload);
 }
 
 /**
@@ -53,19 +53,19 @@ function retrieveAllCitiesData(cityList, date, forceReload){
  * @param date
  * @param forceReload true if the data is to be retrieved from the server
  */
-async function loadCityData(city, date, forceReload){
+async function loadCityData(image_id, forceReload){
     // there is no point in retrieving the data from the db if force reload is true:
     // we should not do the following operation if forceReload is true
     // there is room for improvement in this code
-    let cachedData=await getCachedData(city, date);
+    let cachedData=await getCachedData(image_id);
     if (!forceReload && cachedData && cachedData.length>0) {
         for (let res of cachedData)
             addToResults(res);
     } else {
-        const input = JSON.stringify({location: city, date: date});
+        const input = JSON.stringify({id: image_id});
         $.ajax({
             url: '/weather_data',
-            data: input,
+            id: input,
             contentType: 'application/json',
             type: 'POST',
             success: function (dataR) {
@@ -73,14 +73,14 @@ async function loadCityData(city, date, forceReload){
                 // dataType:json, so JQuery knows it and unpacks the
                 // object for us before returning it
                 addToResults(dataR);
-                storeCachedData(dataR.location, dataR);
+                storeCachedData(dataR.id, dataR);
                 if (document.getElementById('offline_div') != null)
                     document.getElementById('offline_div').style.display = 'none';
             },
             // the request to the server has failed. Let's show the cached data
             error: function (xhr, status, error) {
                 showOfflineWarning();
-                getCachedData(city, date);
+                getCachedData(image_id);
                 const dvv = document.getElementById('offline_div');
                 if (dvv != null)
                     dvv.style.display = 'block';
@@ -88,8 +88,8 @@ async function loadCityData(city, date, forceReload){
         });
     }
     // hide the list of cities if currently shown
-    if (document.getElementById('city_list')!=null)
-        document.getElementById('city_list').style.display = 'none';
+    if (document.getElementById('image_list')!=null)
+        document.getElementById('image_list').style.display = 'none';
 }
 
 
