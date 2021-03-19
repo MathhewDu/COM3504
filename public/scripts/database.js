@@ -3,36 +3,35 @@
 import * as idb from './idb/index.js';
 
 
-/** class imageObject{
- *  constructor (id, address, title, description, author) {
- *
- *    this.id= id;
- *    this.address= address,
- *    this.title=title;
- *    this.description= description;
- *    this.author= author;
+/** class chatObject{
+ *  constructor (id:int,room:int, username:string, msgID:int, msg:string) {
+ *    this.id = id;
+ *    this.room= room;
+ *    this.username= username,
+ *    this.msgID=msgID;
+ *    this.msg= msg;
  *  }
  *
  *}
  */
 let db;
 
-const IMAGE_DB_NAME= 'db_image_1';
-const IMAGE_STORE_NAME= 'store_images';
+const CHAT_DB_NAME= 'db_chat_1';
+const CHAT_STORE_NAME= 'store_chat';
 
 /**
  * it inits the database
  */
 async function initDatabase(){
     if (!db) {
-        db = await idb.openDB(IMAGE_DB_NAME, 2, {
+        db = await idb.openDB(CHAT_DB_NAME, 2, {
             upgrade(upgradeDb, oldVersion, newVersion) {
-                if (!upgradeDb.objectStoreNames.contains(IMAGE_STORE_NAME)) {
-                    let imageDB = upgradeDb.createObjectStore(IMAGE_STORE_NAME, {
+                if (!upgradeDb.objectStoreNames.contains(CHAT_STORE_NAME)) {
+                    let imageDB = upgradeDb.createObjectStore(CHAT_STORE_NAME, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    imageDB.createIndex('author', 'author', {unique: false, multiEntry: true});
+                    imageDB.createIndex('room', 'room', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -42,8 +41,8 @@ async function initDatabase(){
 window.initDatabase= initDatabase;
 /**
  * it saves the forecasts for a city in localStorage
- * @param image
- * @param imageObject
+ * @param chat
+ * @param chatObject
  */
 async function storeCachedData(image, forecastObject) {
     console.log('inserting: '+JSON.stringify(forecastObject));
@@ -51,8 +50,8 @@ async function storeCachedData(image, forecastObject) {
         await initDatabase();
     if (db) {
         try{
-            let tx = await db.transaction(IMAGE_STORE_NAME, 'readwrite');
-            let store = await tx.objectStore(IMAGE_STORE_NAME);
+            let tx = await db.transaction(CHAT_STORE_NAME, 'readwrite');
+            let store = await tx.objectStore(CHAT_STORE_NAME);
             await store.put(forecastObject);
             await  tx.complete;
             console.log('added item to the store! '+ JSON.stringify(forecastObject));
