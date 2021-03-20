@@ -1,9 +1,4 @@
 
-const CLOUDY = 0;
-const CLEAR = 1;
-const RAINY = 2;
-const OVERCAST = 3;
-const SNOWY = 4;
 
 
 /**
@@ -27,9 +22,9 @@ function initImageSystem() {
  * @param forceReload true if the data is to be loaded from the server
  */
 function loadData(forceReload){
-    var imageLIst=JSON.parse(localStorage.getItem('author'));
-    imagelist=removeDuplicates(imagelist);
-    retrieveAllCitiesData(imagelist, forceReload);
+    var room_list=JSON.parse(localStorage.getItem('room'));
+    room_list=removeDuplicates(room_list);
+    retrieveAllCitiesData(room_list, forceReload);
 }
 
 /**
@@ -39,10 +34,10 @@ function loadData(forceReload){
  * @param date the date for the forecasts (not in use)
  * @param forceReload true if the data is to be retrieved from the server
  */
-function retrieveAllCitiesData(imageList, date, forceReload){
+function retrieveAllCitiesData(room_list, date, forceReload){
     refreshCityList();
-    for (let index in imagelist)
-        loadImageData(imagelist[index], forceReload);
+    for (let index in room_list)
+        loadChatData(room_list[index], forceReload);
 }
 
 /**
@@ -53,34 +48,33 @@ function retrieveAllCitiesData(imageList, date, forceReload){
  * @param date
  * @param forceReload true if the data is to be retrieved from the server
  */
-async function loadCityData(image_id, forceReload){
+async function loadChatData(roomID, forceReload){
     // there is no point in retrieving the data from the db if force reload is true:
     // we should not do the following operation if forceReload is true
     // there is room for improvement in this code
-    let cachedData=await getCachedData(image_id);
-    if (!forceReload && cachedData && cachedData.length>0) {
-        for (let res of cachedData)
+    let chatData=await getChatData(roomID);
+    if (!forceReload && chatData && chatData.length>0) {
+        for (let res of chatData)
             addToResults(res);
     } else {
-        const input = JSON.stringify({id: image_id});
+        const input = JSON.stringify({room: roomID});
         $.ajax({
-            url: '/weather_data',
-            id: input,
+            url: '/chat_data',
+            data: input,
             contentType: 'application/json',
             type: 'POST',
             success: function (dataR) {
                 // no need to JSON parse the result, as we are using
                 // dataType:json, so JQuery knows it and unpacks the
                 // object for us before returning it
-                addToResults(dataR);
-                storeCachedData(dataR.id, dataR);
+                storeChatData(dataR.room, dataR);
                 if (document.getElementById('offline_div') != null)
                     document.getElementById('offline_div').style.display = 'none';
             },
             // the request to the server has failed. Let's show the cached data
             error: function (xhr, status, error) {
                 showOfflineWarning();
-                getCachedData(image_id);
+                getChatData(room);
                 const dvv = document.getElementById('offline_div');
                 if (dvv != null)
                     dvv.style.display = 'block';
@@ -88,8 +82,8 @@ async function loadCityData(image_id, forceReload){
         });
     }
     // hide the list of cities if currently shown
-    if (document.getElementById('image_list')!=null)
-        document.getElementById('image_list').style.display = 'none';
+    if (document.getElementById('room_list')!=null)
+        document.getElementById('room_list').style.display = 'none';
 }
 
 
@@ -100,22 +94,22 @@ async function loadCityData(image_id, forceReload){
  * given the forecast data returned by the server,
  * it adds a row of weather forecasts to the results div
  * @param dataR the data returned by the server:
- * class WeatherForecast{
-  *  constructor (location, date, forecast, temperature, wind, precipitations) {
-  *    this.location= location;
-  *    this.date= date,
-  *    this.forecast=forecast;
-  *    this.temperature= temperature;
-  *    this.wind= wind;
-  *    this.precipitations= precipitations;
-  *  }
-  *}
+    class chatObject{
+ *  constructor (room:int, username:string, msgID:int, msg:string) {
+ *
+ *    this.room= room;
+ *    this.username= username,
+ *    this.msgID=msgID;
+ *    this.msg= msg;
+ *  }
+ *
+ *}
  */
 function addToResults(dataR) {
-    if (document.getElementById('results') != null) {
+    if (document.getElementById('room') != null) {
         const row = document.createElement('div');
         // appending a new row
-        document.getElementById('results').appendChild(row);
+        document.getElementById('room').appendChild(row);
         // formatting the row by applying css classes
         row.classList.add('card');
         row.classList.add('my_card');
@@ -124,11 +118,10 @@ function addToResults(dataR) {
         // rather than assigning innerHTML
         row.innerHTML = "<div class='card-block'>" +
             "<div class='row'>" +
-            "<div class='col-xs-2'><h4 class='card-title'>" + dataR.location + "</h4></div>" +
-            "<div class='col-xs-2'>" + getForecast(dataR.forecast) + "</div>" +
-            "<div class='col-xs-2'>" + getTemperature(dataR) + "</div>" +
-            "<div class='col-xs-2'>" + getPrecipitations(dataR) + "</div>" +
-            "<div class='col-xs-2'>" + getWind(dataR) + "</div>" +
+            "<div class='col-xs-2'><h4 class='card-title'>" + dataR.room + "</h4></div>" +
+            "<div class='col-xs-2'>" + getUsername(dataR) + "</div>" +
+            "<div class='col-xs-2'>" + getMsgID(dataR) + "</div>" +
+            "<div class='col-xs-2'>" + getMsg(dataR) + "</div>" +
             "<div class='col-xs-2'></div></div></div>";
     }
 }
@@ -149,13 +142,13 @@ function refreshCityList(){
  * @param city
  * @param date
  */
-function selectCity(city, date) {
-    var cityList=JSON.parse(localStorage.getItem('cities'));
-    if (cityList==null) cityList=[];
-    cityList.push(city);
-    cityList = removeDuplicates(cityList);
-    localStorage.setItem('cities', JSON.stringify(cityList));
-    retrieveAllCitiesData(cityList, date, true);
+function selectCity(room) {
+    var roomList=JSON.parse(localStorage.getItem('room'));
+    if (roomList==null) roomList=[];
+    roomList.push(room);
+    roomList = removeDuplicates(roomList);
+    localStorage.setItem('room', JSON.stringify(roomList));
+    retrieveAllCitiesData(roomList, true);
 }
 
 
@@ -196,8 +189,8 @@ function hideOfflineWarning(){
  * it shows the city list in the browser
  */
 function showCityList() {
-    if (document.getElementById('city_list')!=null)
-        document.getElementById('city_list').style.display = 'block';
+    if (document.getElementById('room_list')!=null)
+        document.getElementById('room_list').style.display = 'block';
 }
 
 
@@ -207,10 +200,10 @@ function showCityList() {
  * @param cityList
  * @returns {Array}
  */
-function removeDuplicates(cityList) {
+function removeDuplicates(roomList) {
     // remove any duplicate
        var uniqueNames=[];
-       $.each(cityList, function(i, el){
+       $.each(roomList, function(i, el){
            if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
        });
        return uniqueNames;
