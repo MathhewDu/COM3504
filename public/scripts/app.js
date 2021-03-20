@@ -5,7 +5,7 @@
  * called by the HTML onload
  * showing any cached forecast data and declaring the service worker
  */
-function initImageSystem() {
+function initChatSystem() {
     //check for support
     if ('indexedDB' in window) {
         initDatabase();
