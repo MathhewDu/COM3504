@@ -4,8 +4,8 @@ import * as idb from './idb/index.js';
 
 
 /** class chatObject{
- *  constructor (id:int,room:int, username:string, msgID:int, msg:string) {
- *    this.id = id;
+ *  constructor (room:int, username:string, msgID:int, msg:string) {
+ *
  *    this.room= room;
  *    this.username= username,
  *    this.msgID=msgID;
@@ -40,78 +40,51 @@ async function initDatabase(){
 }
 window.initDatabase= initDatabase;
 /**
- * it saves the forecasts for a city in localStorage
- * @param chat
+ * it saves the chat data for a room in localStorage
+ * @param room
  * @param chatObject
  */
-async function storeCachedData(image, forecastObject) {
-    console.log('inserting: '+JSON.stringify(forecastObject));
+async function storeCachedData(room,chatObject) {
+    console.log('inserting: '+JSON.stringify(chatObject));
     if (!db)
         await initDatabase();
     if (db) {
         try{
             let tx = await db.transaction(CHAT_STORE_NAME, 'readwrite');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            await store.put(forecastObject);
+            await store.put(chatObject);
             await  tx.complete;
-            console.log('added item to the store! '+ JSON.stringify(forecastObject));
+            console.log('added item to the store! '+ JSON.stringify(chatObject));
         } catch(error) {
-            localStorage.setItem(image, JSON.stringify(forecastObject));
+            localStorage.setItem(room, JSON.stringify(chatObject));
         };
     }
-    else localStorage.setItem(image, JSON.stringify(forecastObject));
+    else localStorage.setItem(room, JSON.stringify(chatObject));
 }
 window.storeCachedData= storeCachedData;
 
 /**
- * it retrieves the forecasts data for a city from the database
- * @param city
- * @param date
- * @returns {*}
+ * it retrieves the histories chat data for a room from the database
+ * @param room
  */
-async function getCachedData(city, date) {
+async function getCachedData(room) {
     if (!db)
         await initDatabase();
     if (db) {
         try {
-            console.log('fetching: ' + city);
-            let tx = await db.transaction(FORECAST_STORE_NAME, 'readonly');
-            let store = await tx.objectStore(FORECAST_STORE_NAME);
-            let index = await store.index('location');
-            let readingsList = await index.getAll(IDBKeyRange.only(city));
+            console.log('fetching: ' + room);
+            let tx = await db.transaction(CHAT_STORE_NAME, 'readonly');
+            let store = await tx.objectStore(CHAT_STORE_NAME);
+            let index = await store.index('room');
+            let histories = await index.getAll(IDBKeyRange.only(room));
             await tx.complete;
-            let finalResults=[];
-            if (readingsList && readingsList.length > 0) {
-                let max;
-                for (let elem of readingsList)
-                    if (!max || elem.date > max.date)
-                        max = elem;
-                if (max)
-                    finalResults.push(max);
-                return finalResults;
-            } else {
-                const value = localStorage.getItem(city);
-                if (value == null)
-                    return finalResults;
-                else finalResults.push(value);
-                return finalResults;
-            }
+            return histories;
         } catch (error) {
             console.log(error);
         }
     } else {
-        const value = localStorage.getItem(city);
-        let finalResults=[];
-        if (value == null)
-            return finalResults;
-        else finalResults.push(value);
-        return finalResults;
+        console.log('IndexedDB not available');
     }
 }
 window.getCachedData= getCachedData;
 
-/**
- * given the server data, it returns the value of the field precipitations
- * @param dataR the data returned by the server
- * @returns {*}
- */
