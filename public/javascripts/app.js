@@ -2,8 +2,7 @@
 
 
 /**
- * called by the HTML onload
- * showing any cached forecast data and declaring the service worker
+not used!!!
  */
 function initChatSystem() {
     //check for support
@@ -22,7 +21,7 @@ function initChatSystem() {
  * @param forceReload true if the data is to be loaded from the server
  */
 function loadData(forceReload){
-    var room_list=JSON.parse(localStorage.getItem('room'));
+    var room_list=JSON.parse(localStorage.getItem('roomNo'));
     room_list=removeDuplicates(room_list);
     retrieveAllCitiesData(room_list, forceReload);
 }
@@ -34,7 +33,7 @@ function loadData(forceReload){
  * @param date the date for the forecasts (not in use)
  * @param forceReload true if the data is to be retrieved from the server
  */
-function retrieveAllCitiesData(room_list, date, forceReload){
+function retrieveAllCitiesData(room_list, forceReload){
     refreshCityList();
     for (let index in room_list)
         loadChatData(room_list[index], forceReload);
@@ -57,7 +56,7 @@ async function loadChatData(roomID, forceReload){
         for (let res of chatData)
             addToResults(res);
     } else {
-        const input = JSON.stringify({room: roomID});
+        const input = JSON.stringify({roomNo: roomID});
         $.ajax({
             url: '/chat_data',
             data: input,
@@ -67,14 +66,14 @@ async function loadChatData(roomID, forceReload){
                 // no need to JSON parse the result, as we are using
                 // dataType:json, so JQuery knows it and unpacks the
                 // object for us before returning it
-                storeChatData(dataR.room, dataR);
+                storeChatData(dataR.roomNo, dataR);
                 if (document.getElementById('offline_div') != null)
                     document.getElementById('offline_div').style.display = 'none';
             },
             // the request to the server has failed. Let's show the cached data
             error: function (xhr, status, error) {
                 showOfflineWarning();
-                getChatData(room);
+                getChatData(roomNo);
                 const dvv = document.getElementById('offline_div');
                 if (dvv != null)
                     dvv.style.display = 'block';
@@ -106,10 +105,10 @@ async function loadChatData(roomID, forceReload){
  *}
  */
 function addToResults(dataR) {
-    if (document.getElementById('room') != null) {
+    if (document.getElementById('roomNo') != null) {
         const row = document.createElement('div');
         // appending a new row
-        document.getElementById('room').appendChild(row);
+        document.getElementById('roomNo').appendChild(row);
         // formatting the row by applying css classes
         row.classList.add('card');
         row.classList.add('my_card');
@@ -142,12 +141,12 @@ function refreshCityList(){
  * @param city
  * @param date
  */
-function selectCity(room) {
-    var roomList=JSON.parse(localStorage.getItem('room'));
+function selectRoom(room) {
+    var roomList=JSON.parse(localStorage.getItem('roomNo'));
     if (roomList==null) roomList=[];
     roomList.push(room);
     roomList = removeDuplicates(roomList);
-    localStorage.setItem('room', JSON.stringify(roomList));
+    localStorage.setItem('roomNo', JSON.stringify(roomList));
     retrieveAllCitiesData(roomList, true);
 }
 
@@ -188,7 +187,7 @@ function hideOfflineWarning(){
 /**
  * it shows the city list in the browser
  */
-function showCityList() {
+function showRoomList() {
     if (document.getElementById('room_list')!=null)
         document.getElementById('room_list').style.display = 'block';
 }

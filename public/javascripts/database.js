@@ -1,6 +1,5 @@
 ////////////////// DATABASE //////////////////
 // the database receives from the server the following structure
-import * as idb from './idb/index.js';
 
 
 /** class chatObject{
@@ -31,7 +30,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    ChatDB.createIndex('room', 'room', {unique: false, multiEntry: true});
+                    ChatDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -44,22 +43,20 @@ window.initDatabase= initDatabase;
  * @param room
  * @param chatObject
  */
-async function storeChatData(room,chatObject) {
-    console.log('inserting: '+JSON.stringify(chatObject));
+async function storeChatData(roomNo,user,msgID,msg) {
     if (!db)
         await initDatabase();
     if (db) {
         try{
             let tx = await db.transaction(CHAT_STORE_NAME, 'readwrite');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            await store.put(chatObject);
+            await store.put({"roomNo":roomNo,'user':user,"msgID":msgID,"msg":msg});
             await  tx.complete;
-            console.log('added item to the store! '+ JSON.stringify(chatObject));
         } catch(error) {
-            localStorage.setItem(room, JSON.stringify(chatObject));
+            console.log('IndexedDB not available');
         };
     }
-    else localStorage.setItem(room, JSON.stringify(chatObject));
+    console.log('IndexedDB not available');
 }
 window.storeChatData= storeChatData;
 
@@ -75,7 +72,7 @@ async function getChatData(room) {
             console.log('fetching: ' + room);
             let tx = await db.transaction(CHAT_STORE_NAME, 'readonly');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            let index = await store.index('room');
+            let index = await store.index('roomNo');
             let histories = await index.getAll(IDBKeyRange.only(room));
             await tx.complete;
             return histories;

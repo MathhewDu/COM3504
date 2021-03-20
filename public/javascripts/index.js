@@ -1,7 +1,7 @@
 let name = null;
 let roomNo = null;
 let socket = io();
-
+let msgID = 0;
 
 /**
  * called by <body onload>
@@ -54,6 +54,7 @@ function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     // @todo send the chat message
     socket.emit('chat', roomNo, name, chatText);
+    storeChatData(roomNo,name,msgID,chatText);
 }
 
 /**
@@ -69,6 +70,10 @@ function connectToRoom() {
     socket.emit('create or join', roomNo, name);
     initCanvas(socket, imageUrl);
     hideLoginInterface(roomNo, name);
+
+    let chat_histories = getChatData(roomNo);
+    if (chat_histories='') writeOnHistory('It\'s a new room');
+    else writeOnHistory(chat_histories);
 }
 
 /**
