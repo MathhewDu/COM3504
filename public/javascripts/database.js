@@ -1,7 +1,6 @@
 ////////////////// DATABASE //////////////////
 // the database receives from the server the following structure
 
-
 /** class chatObject{
  *  constructor (room:int, username:string, msgID:int, msg:string) {
  *
@@ -86,9 +85,9 @@ async function getChatData(room) {
 window.getChatData= getChatData;
 
 function getUsername(dataR) {
-    if (dataR.username == null && dataR.username === undefined)
+    if (dataR.user == null && dataR.user === undefined)
         return "unavailable";
-    else return dataR.username;
+    else return dataR.user;
 }
 window.getUsername=getUsername;
 

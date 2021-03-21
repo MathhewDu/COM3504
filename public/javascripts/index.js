@@ -55,6 +55,7 @@ function sendChatText() {
     // @todo send the chat message
     socket.emit('chat', roomNo, name, chatText);
     storeChatData(roomNo,name,msgID,chatText);
+    msgID = msgID+1
 }
 
 /**
@@ -68,7 +69,7 @@ function connectToRoom() {
     if (!name) name = 'Unknown-' + Math.random();
     //@todo join the room
     socket.emit('create or join', roomNo, name);
-    initCanvas(socket, imageUrl);
+    initCanvas(socket, imageUrl );
     hideLoginInterface(roomNo, name);
 
     let chat_histories = getChatData(roomNo);
