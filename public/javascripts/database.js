@@ -50,7 +50,7 @@ async function storeChatData(roomNo,user,msgID,msg) {
         try {
             let tx = await db.transaction(CHAT_STORE_NAME, 'readwrite');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            await store.put({"roomNo": roomNo, 'user': user, "msgID": msgID, "msg": msg});
+            await store.put({"roomNo": roomNo, "user": user, "msgID": msgID, "msg": msg});
             await tx.complete;
         } catch (error) {
             console.log('IndexedDB not available');
@@ -75,7 +75,7 @@ async function getChatData(room) {
             console.log('fetching: ' + room);
             let tx = await db.transaction(CHAT_STORE_NAME, 'readonly');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            let index = await store.index('roomNo');
+            let index = await store.index("roomNo");
             let histories = await index.getAll(IDBKeyRange.only(room));
             await tx.complete;
             return histories;
@@ -89,7 +89,7 @@ async function getChatData(room) {
 window.getChatData= getChatData;
 
 
-function getUsername(dataR) {
+async function getUsername(dataR) {
     if (dataR.user == null && dataR.user === undefined)
         return "unavailable";
     else return dataR.user;
@@ -103,9 +103,14 @@ function getMsgID(dataR) {
 }
 window.getMsgID=getMsgID;
 
-function getMsg(dataR) {
-    if (dataR.msg == null && dataR.msg === undefined)
+async function PrintHistoryMsg(room) {
+    let chat = await getChatData(room);
+    if (chat == null && chat === undefined)
         return "unavailable";
-    else return dataR.msg;
+    else
+        for (let i = 0; i < chat.length; ++i){
+            let msg = '<b>' + chat[i]["user"] + ':</b> '+chat[i]["msg"]
+            writeOnHistory(msg);
+        }
 }
-window.getMsg=getMsg;
+window.PrintHistoryMsg=PrintHistoryMsg;

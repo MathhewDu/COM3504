@@ -72,7 +72,7 @@ function connectToRoom() {
     initCanvas(socket, imageUrl );
     hideLoginInterface(roomNo, name);
     let paragraph = document.createElement('p');
-    paragraph.innerHTML = getChatData(roomNo);
+    PrintHistoryMsg(roomNo);
 }
 
 /**
