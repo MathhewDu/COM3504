@@ -2,7 +2,6 @@ let name = null;
 let roomNo = null;
 let socket = io();
 let msgID = 0;
-
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -54,8 +53,9 @@ function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     // @todo send the chat message
     socket.emit('chat', roomNo, name, chatText);
+    let msgID = currenttime()
     storeChatData(roomNo,name,msgID,chatText);
-    msgID = msgID+1
+
 }
 
 /**
@@ -71,10 +71,8 @@ function connectToRoom() {
     socket.emit('create or join', roomNo, name);
     initCanvas(socket, imageUrl );
     hideLoginInterface(roomNo, name);
-
-    let chat_histories = getChatData(roomNo);
-    if (chat_histories='') writeOnHistory('It\'s a new room');
-    else writeOnHistory(chat_histories);
+    let paragraph = document.createElement('p');
+    paragraph.innerHTML = getChatData(roomNo);
 }
 
 /**
@@ -105,3 +103,8 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
+function currenttime() {
+    let d = new Date()
+    let str = d.getFullYear() +d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds();
+    return str
+}

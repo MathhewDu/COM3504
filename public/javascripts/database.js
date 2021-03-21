@@ -13,7 +13,7 @@
  *}
  */
 let db;
-
+import * as idb from './idb/index.js';
 const CHAT_DB_NAME= 'db_chat_1';
 const CHAT_STORE_NAME= 'store_chat';
 
@@ -37,6 +37,7 @@ async function initDatabase(){
     }
 }
 window.initDatabase= initDatabase;
+
 /**
  * it saves the chat data for a room in localStorage
  * @param room
@@ -46,18 +47,21 @@ async function storeChatData(roomNo,user,msgID,msg) {
     if (!db)
         await initDatabase();
     if (db) {
-        try{
+        try {
             let tx = await db.transaction(CHAT_STORE_NAME, 'readwrite');
             let store = await tx.objectStore(CHAT_STORE_NAME);
-            await store.put({"roomNo":roomNo,'user':user,"msgID":msgID,"msg":msg});
-            await  tx.complete;
-        } catch(error) {
+            await store.put({"roomNo": roomNo, 'user': user, "msgID": msgID, "msg": msg});
+            await tx.complete;
+        } catch (error) {
             console.log('IndexedDB not available');
-        };
-    }
+        }
+        ;
+    } else {
     console.log('IndexedDB not available');
+    }
 }
 window.storeChatData= storeChatData;
+
 
 /**
  * it retrieves the histories chat data for a room from the database
@@ -83,6 +87,7 @@ async function getChatData(room) {
     }
 }
 window.getChatData= getChatData;
+
 
 function getUsername(dataR) {
     if (dataR.user == null && dataR.user === undefined)
