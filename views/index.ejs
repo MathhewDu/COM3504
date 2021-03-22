@@ -28,7 +28,28 @@
         <p style=" width: 100%"><label for="image_url"> Image (URL) </label><input type="text" id="image_url" name="image_url"></p>
         <button id="connect" onclick="connectToRoom()">Connect</button>
     </form>
+    <br>
+    <br>
+    <div id="upload_img" style="display: block">
+        <form action="/doAdd" method="post" enctype="multipart/form-data">
+
+            Title:<input type="text" name="title" id="title">
+            <br>
+            <br>
+
+            Describe:<textarea name="desc" id="desc" cols="30" rows="10"></textarea>
+            <br>
+            <br>
+
+            Pictures:<input type="file" name="pic" id="pic">
+            <br>
+            <br>
+            <input type="submit" value="submit">
+        </form>
+    </div>
 </div>
+
+
 <div id="chat_interface" style="display: none">
     <div>
     <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
