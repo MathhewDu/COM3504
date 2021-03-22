@@ -69,7 +69,6 @@ function connectToRoom() {
     socket.emit('create or join', roomNo, name);
     initCanvas(socket, imageUrl );
     hideLoginInterface(roomNo, name);
-    let paragraph = document.createElement('p');
     PrintHistoryMsg(roomNo);
 }
 
@@ -101,11 +100,7 @@ function hideLoginInterface(room, userId) {
     document.getElementById('in_room').innerHTML= ' '+room;
 }
 
-function currenttime() {
-    let d = new Date()
-    let str = d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds();
-    return str
-}
+
 
 /**
  * it sends an Ajax query using JQuery
@@ -125,6 +120,7 @@ function sendAjaxQuery(url, data) {
             // object for us before returning it
             // in order to have the object printed by alert
             // we need to JSON.stringify the object
+            storeImageData(roomNo, dataR);
             document.getElementById('results').innerHTML= JSON.stringify(dataR);
         },
         error: function (response) {
@@ -141,16 +137,14 @@ function sendAjaxQuery(url, data) {
  * called when the submit button is pressed
  * @param event the submission event
  */
-function onSubmit() {
-    // The .serializeArray() method creates a JavaScript array of objects
-    // https://api.jquery.com/serializearray/
-    const formArray= $("form").serializeArray();
+function createAjaxQuery(url,title,description,author) {
     const data={};
-    for (let index in formArray){
-        data[formArray[index].name]= formArray[index].value;
-    }
+    data['title']= title;
+    data['description'] = description;
+    data['author'] = author;
+
     // const data = JSON.stringify($(this).serializeArray());
-    sendAjaxQuery('/', data);
+    sendAjaxQuery(url, data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault()
 }

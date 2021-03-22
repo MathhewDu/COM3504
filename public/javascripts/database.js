@@ -13,9 +13,12 @@
  *}
  */
 let db;
+let imgdb;
 import * as idb from './idb/index.js';
 const CHAT_DB_NAME= 'db_chat_1';
 const CHAT_STORE_NAME= 'store_chat';
+const IMG_DB_NAME= 'db_img_1';
+const IMG_STORE_NAME= 'store_img';
 
 let msgid = 0;
 /**
@@ -34,7 +37,18 @@ async function initDatabase(){
                 }
             }
         });
-        console.log('db created');
+        imgdb = await idb.openDB(IMG_DB_NAME, 2, {
+            upgrade(upgradeDb, oldVersion, newVersion) {
+                if (!upgradeDb.objectStoreNames.contains(IMG_STORE_NAME)) {
+                    let imgDB = upgradeDb.createObjectStore(IMG_STORE_NAME, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    imgDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
+                }
+            }
+        });
+        console.log('img db created');
     }
 }
 window.initDatabase= initDatabase;
@@ -62,6 +76,25 @@ async function storeChatData(roomNo,user,msgID,msg) {
     }
 }
 window.storeChatData= storeChatData;
+
+
+async function storeImageData(roomNo,imageObject) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try {
+            let tx = await db.transaction(IMG_STORE_NAME, 'readwrite');
+            let store = await tx.objectStore(IMG_STORE_NAME);
+            await store.put({"roomNo": roomNo, imageObject});
+            await tx.complete;
+        } catch (error) {
+            console.log('IndexedDB not available');
+        };
+    } else {
+        console.log('IndexedDB not available');
+    }
+}
+window.storeImageData= storeImageData;
 
 
 /**
@@ -119,3 +152,4 @@ async function PrintHistoryMsg(room) {
         }
 }
 window.PrintHistoryMsg=PrintHistoryMsg;
+
