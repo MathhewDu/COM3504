@@ -17,6 +17,7 @@ import * as idb from './idb/index.js';
 const CHAT_DB_NAME= 'db_chat_1';
 const CHAT_STORE_NAME= 'store_chat';
 
+let msgid = 0;
 /**
  * it inits the database
  */
@@ -96,12 +97,16 @@ async function getUsername(dataR) {
 }
 window.getUsername=getUsername;
 
-function getMsgID(dataR) {
-    if (dataR.msgID == null && dataR.msgID === undefined)
+async function createMsgID(roomNo,name,chatText) {
+    let chat = await getChatData(roomNo);
+    if (chat == null && chat === undefined)
         return "unavailable";
-    else return dataR.msgID;
+    else
+        msgid = chat[chat.length-1].id+1;
+        msgid = roomNo.toString()+msgid.toString();
+        storeChatData(roomNo,name,msgid,chatText);
 }
-window.getMsgID=getMsgID;
+window.createMsgID=createMsgID;
 
 async function PrintHistoryMsg(room) {
     let chat = await getChatData(room);

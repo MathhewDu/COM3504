@@ -1,7 +1,7 @@
 let name = null;
 let roomNo = null;
 let socket = io();
-let msgID = 0;
+let msgID = 0
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -53,9 +53,7 @@ function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     // @todo send the chat message
     socket.emit('chat', roomNo, name, chatText);
-    let msgID = currenttime()
-    storeChatData(roomNo,name,msgID,chatText);
-
+    createMsgID(roomNo,name,chatText);
 }
 
 /**
@@ -105,6 +103,55 @@ function hideLoginInterface(room, userId) {
 
 function currenttime() {
     let d = new Date()
-    let str = d.getFullYear() +d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds();
+    let str = d.getMonth() + d.getDate() + d.getHours() + d.getMinutes() + d.getSeconds();
     return str
 }
+
+/**
+ * it sends an Ajax query using JQuery
+ * @param url the url to send to
+ * @param data the data to send (e.g. a Javascript structure)
+ */
+function sendAjaxQuery(url, data) {
+    $.ajax({
+        url: url ,
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            // no need to JSON parse the result, as we are using
+            // dataType:json, so JQuery knows it and unpacks the
+            // object for us before returning it
+            // in order to have the object printed by alert
+            // we need to JSON.stringify the object
+            document.getElementById('results').innerHTML= JSON.stringify(dataR);
+        },
+        error: function (response) {
+            // the error structure we passed is in the field responseText
+            // it is a string, even if we returned as JSON
+            // if you want o unpack it you must do:
+            // const dataR= JSON.parse(response.responseText)
+            alert (response.responseText);
+        }
+    });
+}
+
+/**
+ * called when the submit button is pressed
+ * @param event the submission event
+ */
+function onSubmit() {
+    // The .serializeArray() method creates a JavaScript array of objects
+    // https://api.jquery.com/serializearray/
+    const formArray= $("form").serializeArray();
+    const data={};
+    for (let index in formArray){
+        data[formArray[index].name]= formArray[index].value;
+    }
+    // const data = JSON.stringify($(this).serializeArray());
+    sendAjaxQuery('/', data);
+    // prevent the form from reloading the page (normal behaviour for forms)
+    event.preventDefault()
+}
+
