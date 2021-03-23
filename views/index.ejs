@@ -26,8 +26,28 @@
             <input type="text" id="roomNo" name="roomNo">
             <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
         </p>
-        <p style=" width: 100%"><label for="image_url"> Image (URL) </label><input type="text" id="image_url" name="image_url"></p>
+        <p style=" width: 100%">
+            <label for="image_url"> Image (URL) </label>
+            <input type="text" id="image_url" name="image_url">
+        </p>
         <button id="connect" onclick="connectToRoom()">Connect</button>
+
+        <p><b>Upload Image</b></p>
+        <p>Please write the author, title, and description</p>
+        <p><label for="title"> Image's title </label>
+            <input type="text" id="title" name="title">
+        </p>
+        <p>
+            <label for="description"> description </label>
+            <input type="text" id="description" name="description">
+        </p>
+        <p>
+            <label for="author"> author </label>
+            <input type="text" id="author" name="author">
+        </p>
+        <p style=" width: 100%"><label for="url"> Image (URL) </label><input type="text" id="url" name="url"></p>
+
+        <button id="upload" onclick="createAjaxQuery()">uploadImage</button>
     </form>
 </div>
 <div id="chat_interface" style="display: none">
@@ -48,10 +68,10 @@
                 <label for="name"> chat: </label>
                 <input type="text" id="chat_input" name="chat_input" style="width: 80%">
                 <button id="chat_send" onclick="sendChatText()">Send</button>
+                <button id="Back" onclick="gohome()">Back</button>
             </p>
         </form>
     </div>
-</div>
 
 </body>
 

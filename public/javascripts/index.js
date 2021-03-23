@@ -107,9 +107,9 @@ function hideLoginInterface(room, userId) {
  * @param url the url to send to
  * @param data the data to send (e.g. a Javascript structure)
  */
-function sendAjaxQuery(url, data) {
+function sendAjaxQuery(url,data) {
     $.ajax({
-        url: url ,
+        url: '/' ,
         data: JSON.stringify(data),
         contentType: 'application/json',
         dataType: 'json',
@@ -120,8 +120,7 @@ function sendAjaxQuery(url, data) {
             // object for us before returning it
             // in order to have the object printed by alert
             // we need to JSON.stringify the object
-            storeImageData(roomNo, dataR);
-            document.getElementById('results').innerHTML= JSON.stringify(dataR);
+            storeImageData(url,dataR);
         },
         error: function (response) {
             // the error structure we passed is in the field responseText
@@ -130,6 +129,7 @@ function sendAjaxQuery(url, data) {
             // const dataR= JSON.parse(response.responseText)
             alert (response.responseText);
         }
+
     });
 }
 
@@ -137,15 +137,23 @@ function sendAjaxQuery(url, data) {
  * called when the submit button is pressed
  * @param event the submission event
  */
-function createAjaxQuery(url,title,description,author) {
+function createAjaxQuery() {
+    let title = document.getElementById('description').value;
+    let description = document.getElementById('description').value;
+    let url = document.getElementById('url').value;
+    let author = document.getElementById('author').value;
     const data={};
+    data['url'] = url
     data['title']= title;
     data['description'] = description;
     data['author'] = author;
 
     // const data = JSON.stringify($(this).serializeArray());
-    sendAjaxQuery(url, data);
+    sendAjaxQuery(url,data);
     // prevent the form from reloading the page (normal behaviour for forms)
-    event.preventDefault()
+    //event.preventDefault()
 }
-
+function gohome()
+{
+    window.location.href=".."
+}

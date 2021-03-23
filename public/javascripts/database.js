@@ -44,7 +44,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    imgDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
+                    imgDB.createIndex('url', 'url', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -78,21 +78,22 @@ async function storeChatData(roomNo,user,msgID,msg) {
 window.storeChatData= storeChatData;
 
 
-async function storeImageData(roomNo,imageObject) {
-    if (!db)
+async function storeImageData(url,imageObject) {
+    if (!imgdb)
         await initDatabase();
-    if (db) {
+    if (imgdb) {
         try {
-            let tx = await db.transaction(IMG_STORE_NAME, 'readwrite');
+            let tx = await imgdb.transaction(IMG_STORE_NAME, 'readwrite');
             let store = await tx.objectStore(IMG_STORE_NAME);
-            await store.put({"roomNo": roomNo, imageObject});
+            await store.put(imageObject);
             await tx.complete;
+            console.log('added item to the store! '+JSON.stringify(imageObject));
         } catch (error) {
             console.log('IndexedDB not available');
         };
     } else {
         console.log('IndexedDB not available');
-    }
+    }gohome()//should be clear()
 }
 window.storeImageData= storeImageData;
 
@@ -121,6 +122,27 @@ async function getChatData(room) {
     }
 }
 window.getChatData= getChatData;
+
+async function getImgData(url) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try {
+            console.log('fetching: ' + url);
+            let tx = await db.transaction(IMG_STORE_NAME, 'readonly');
+            let store = await tx.objectStore(IMG_STORE_NAME);
+            let index = await store.index('url');
+            let imagedata = await index.getAll(IDBKeyRange.only(url));
+            await tx.complete;
+            return imagedata;
+    } catch (error) {
+        console.log(error);
+    }
+} else {
+    console.log('IndexedDB not available');
+}
+}
+window.getImgData= getImgData;
 
 
 async function getUsername(dataR) {
