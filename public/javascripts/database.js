@@ -14,11 +14,14 @@
  */
 let db;
 let imgdb;
+let cvsdb;
 import * as idb from './idb/index.js';
 const CHAT_DB_NAME= 'db_chat_1';
 const CHAT_STORE_NAME= 'store_chat';
 const IMG_DB_NAME= 'db_img_1';
 const IMG_STORE_NAME= 'store_img';
+const CANVAS_DB_NAME = 'db_canvas_1';
+const CANVAS_STORE_NAME = 'store_canvas';
 
 let msgid = 0;
 /**
@@ -36,7 +39,8 @@ async function initDatabase(){
                     ChatDB.createIndex('roomNo', 'roomNo', {unique: false, multiEntry: true});
                 }
             }
-        });
+        });}
+    if (!imgdb) {
         imgdb = await idb.openDB(IMG_DB_NAME, 2, {
             upgrade(upgradeDb, oldVersion, newVersion) {
                 if (!upgradeDb.objectStoreNames.contains(IMG_STORE_NAME)) {
@@ -47,9 +51,19 @@ async function initDatabase(){
                     imgDB.createIndex('url', 'url', {unique: false, multiEntry: true});
                 }
             }
-        });
-        console.log('img db created');
-    }
+        });}
+    if (!cvsdb) {
+        cvsdb = await idb.openDB(CANVAS_DB_NAME, 2, {
+            upgrade(upgradeDb, oldVersion, newVersion) {
+                if (!upgradeDb.objectStoreNames.contains(CANVAS_STORE_NAME)) {
+                    let cvsDB = upgradeDb.createObjectStore(CANVAS_STORE_NAME, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    cvsDB.createIndex('RoomAndUrl', 'RoomAndUrl', {unique: false, multiEntry: true});
+                }
+            }
+        });}
 }
 window.initDatabase= initDatabase;
 
@@ -72,7 +86,7 @@ async function storeChatData(roomNo,user,msgID,msg) {
         }
         ;
     } else {
-    console.log('IndexedDB not available');
+        console.log('IndexedDB not available');
     }
 }
 window.storeChatData= storeChatData;
@@ -97,7 +111,24 @@ async function storeImageData(url,imageObject) {
 }
 window.storeImageData= storeImageData;
 
-
+async function storeCanvasData(RoomAndUrl, width, height,prevX, prevY, currX, currY, color, thickness) {
+    if (!cvsdb)
+        await initDatabase();
+    if (cvsdb) {
+        try {
+            let tx = await cvsdb.transaction(CANVAS_STORE_NAME, 'readwrite');
+            let store = await tx.objectStore(CANVAS_STORE_NAME);
+            await store.put({"RoomAndUrl": RoomAndUrl,"width": width,"height": height, "prevX": prevX, "prevY": prevY, "currX": currX, "currY": currY, "color": color, "thickness": thickness});
+            await tx.complete;
+        } catch (error) {
+            console.log('IndexedDB not available');
+        }
+        ;
+    } else {
+        console.log('IndexedDB not available');
+    }
+}
+window.storeCanvasData= storeCanvasData;
 /**
  * it retrieves the histories chat data for a room from the database
  * @param room
@@ -124,26 +155,46 @@ async function getChatData(room) {
 window.getChatData= getChatData;
 
 async function getImgData(url) {
-    if (!db)
+    if (!imgdb)
         await initDatabase();
-    if (db) {
+    if (imgdb) {
         try {
             console.log('fetching: ' + url);
-            let tx = await db.transaction(IMG_STORE_NAME, 'readonly');
+            let tx = await imgdb.transaction(IMG_STORE_NAME, 'readonly');
             let store = await tx.objectStore(IMG_STORE_NAME);
             let index = await store.index('url');
             let imagedata = await index.getAll(IDBKeyRange.only(url));
             await tx.complete;
             return imagedata;
-    } catch (error) {
-        console.log(error);
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        console.log('IndexedDB not available');
     }
-} else {
-    console.log('IndexedDB not available');
-}
 }
 window.getImgData= getImgData;
 
+async function getCanvasData(RoomAndUrl) {
+    if (!cvsdb)
+        await initDatabase();
+    if (cvsdb) {
+        try {
+            console.log('fetching: '+RoomAndUrl);
+            let tx = await cvsdb.transaction(CANVAS_STORE_NAME, 'readonly');
+            let store = await tx.objectStore(CANVAS_STORE_NAME);
+            let index = await store.index("RoomAndUrl");
+            let canvasdata = await index.getAll(IDBKeyRange.only(RoomAndUrl));
+            await tx.complete;
+            return canvasdata;
+        } catch (error) {
+            console.log(error);
+        }
+    } else {
+        console.log('IndexedDB not available');
+    }
+}
+window.getCanvasData= getCanvasData;
 
 async function getUsername(dataR) {
     if (dataR.user == null && dataR.user === undefined)
@@ -158,8 +209,8 @@ async function createMsgID(roomNo,name,chatText) {
         return "unavailable";
     else
         msgid = chat[chat.length-1].id+1;
-        msgid = roomNo.toString()+msgid.toString();
-        storeChatData(roomNo,name,msgid,chatText);
+    msgid = roomNo.toString()+msgid.toString();
+    storeChatData(roomNo,name,msgid,chatText);
 }
 window.createMsgID=createMsgID;
 
@@ -175,3 +226,14 @@ async function PrintHistoryMsg(room) {
 }
 window.PrintHistoryMsg=PrintHistoryMsg;
 
+async function PrintCanvas(ctx,RoomAndUrl) {
+    let canvasdata = await getCanvasData(RoomAndUrl);
+    if (canvasdata == null && canvasdata === undefined)
+        return "unavailable";
+    else
+        for (let i = 0; i < canvasdata.length; ++i){
+            let cv=canvasdata[i]
+            drawOnCanvas(ctx,cv["width"],cv["height"],cv["prevX"],cv["prevY"],cv["currX"],cv["currY"],cv["color"],cv["thickness"]);
+        }
+}
+window.PrintCanvas=PrintCanvas;

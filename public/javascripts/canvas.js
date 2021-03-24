@@ -13,6 +13,8 @@ let color = 'red', thickness = 4;
  */
 function initCanvas(sckt, imageUrl) {
     socket = sckt;
+    let roomNo = document.getElementById('roomNo').value;
+    let RoomAndUrl = roomNo + '+' + imageUrl
     let flag = false,
         prevX, prevY, currX, currY = 0;
     let canvas = $('#canvas');
@@ -37,10 +39,12 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
-                // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
                 socket.emit('draw', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 console.log(room+userId+canvas.width+prevX+color);
+                storeCanvasData(RoomAndUrl, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+
+                // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
+                // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
             }
         }
     });
@@ -139,5 +143,4 @@ function drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY
     ctx.lineWidth = thickness;
     ctx.stroke();
     ctx.closePath();
-    console.log('draw')
 }

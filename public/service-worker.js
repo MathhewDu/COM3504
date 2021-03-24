@@ -17,10 +17,10 @@ var filesToCache = [
 self.addEventListener('install', function(event){
     console.log('[ServiceWorker] Install');
     event.waitUntil(
-       caches.open(cacheName).then(function(cache){
-           console.log('Open cache');
-           return cache.addAll(filesToCache);
-       })
+        caches.open(cacheName).then(function(cache){
+            console.log('Open cache');
+            return cache.addAll(filesToCache);
+        })
     );
 });
 
