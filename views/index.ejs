@@ -15,40 +15,51 @@
 </head>
 <body onload="init()">
 <div id="initial_form" style="display: block">
-    <h1><%= title %></h1>
-    <p>Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</p>
-    <form onsubmit="return false;">
-        <p><label for="name"> Your name </label>
-            <input type="text" id="name" name="name">
-        </p>
-        <p>
-            <label for="roomNo"> Your room </label>
-            <input type="text" id="roomNo" name="roomNo">
-            <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
-        </p>
-        <p style=" width: 100%">
-            <label for="image_url"> Image (URL) </label>
-            <input type="text" id="image_url" name="image_url">
-        </p>
-        <button id="connect" onclick="connectToRoom()">Connect</button>
+    <div class="connect-room">
+        <form onsubmit="return false;">
+            <h1><%= title %></h1>
+            <h3 id="hint">Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</h3>
+            <p><label for="name"> Your name </label>
+                <input type="text" id="name" name="name">
+            </p>
+            <p>
+                <label for="roomNo"> Your room </label>
+                <input type="text" id="roomNo" name="roomNo">
+                <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
+            </p>
+            <p style=" width: 100%">
+                <label for="image_url"> Image (URL) </label>
+                <input type="text" id="image_url" name="image_url">
+            </p>
+            <div class="btdiv">
+                <button id="connect" onclick="connectToRoom()">Connect</button>
+            </div>
 
-        <p><b>Upload Image</b></p>
-        <p>Please write the author, title, and description</p>
-        <p><label for="title"> Image's title </label>
-            <input type="text" id="title" name="title">
-        </p>
-        <p>
-            <label for="description"> description </label>
-            <input type="text" id="description" name="description">
-        </p>
-        <p>
-            <label for="author"> author </label>
-            <input type="text" id="author" name="author">
-        </p>
-        <p style=" width: 100%"><label for="url"> Image (URL) </label><input type="text" id="url" name="url"></p>
+        </form>
+    </div>
+    <div class="up-imgs">
+        <form onsubmit="return false;">
+            <p><h1>Upload Image</h1></p>
+            <h3>Please write the author, title, and description</h3>
+            <p><label for="title"> Image's title </label>
+                <input type="text" id="title" name="title">
+            </p>
+            <p>
+                <label for="description"> Description </label>
+                <input type="text" id="description" name="description">
+            </p>
+            <p>
+                <label for="author"> Author </label>
+                <input type="text" id="author" name="author">
+            </p>
+            <p style=" width: 100%"><label for="url"> Image (URL) </label><input type="text" id="url" name="url"></p>
+            <div class="btdiv">
+                <button id="upload" onclick="createAjaxQuery()">Upload</button>
+            </div>
 
-        <button id="upload" onclick="createAjaxQuery()">uploadImage</button>
-    </form>
+        </form>
+    </div>
+
 </div>
 <div id="chat_interface" style="display: none">
     <div>
@@ -72,7 +83,7 @@
             </p>
         </form>
     </div>
-
+</div>
 </body>
 
 </html>

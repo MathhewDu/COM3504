@@ -22,7 +22,7 @@ function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-    userId = document.getElementById('user');
+    userId = document.getElementById('name');
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         PrintCanvas(ctx, roomNo + '+' + imageUrl)

@@ -5,7 +5,6 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Image Browsing' });
 });
-
 router.post('/', function(req, res, next) {
 
   let imgData = req.body;

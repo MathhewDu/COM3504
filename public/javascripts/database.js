@@ -204,8 +204,8 @@ window.getUsername=getUsername;
 
 async function createMsgID(roomNo,name,chatText) {
     let chat = await getChatData(roomNo);
-    if (chat == null && chat === undefined)
-        return "unavailable";
+    if (chat.length == 0)
+        msgid=1;
     else
         msgid = chat[chat.length-1].id+1;
     msgid = roomNo.toString()+msgid.toString();

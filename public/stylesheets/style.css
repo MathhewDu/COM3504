@@ -1,20 +1,112 @@
 body {
-  font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
 }
 
 .boxed {
-  width: 100%;
-  padding:10px;
+    width: 100%;
+    padding:10px;
 }
 .bottom {
-  position: absolute;
-  bottom: 10px;
-  width: 90%;
+    position: absolute;
+    bottom: 10px;
+    width: 90%;
 }
+h1{
+    font-size: 25px;
+    text-align: center;
+    color: #888;
+    display: block;
+}
+h3{
+    display: block;
+    font-size: 14px;
+    text-align: center;
+    color: #888;
+    margin: 5px 5px;
+}
+button{
+    width: 30%;
+    height: 40px;
+    border:none;
+    color: #fff;
+    /*padding: 10px 25px 10px 25px;*/
+    box-shadow: 1px 1px 5px #B6B6B6;
+    border-radius: 3px;
+    text-shadow: 2px 2px 2px #9E3F3F;
+    cursor: pointer;
+}
+.btdiv{
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+#connect{
+    width: 100%;
+    background:#E27575;
+}
+#upload{
+    width: 100%;
+    background:#459d36;
+}
+#initial_form{
+    margin:100px auto;
+    width:80%;
+    height:30%;
+    /*border:3px solid #C0C0C0;*/
+    float: left;
+    position: relative;
+    left: 10%;
+}
+label{
+    float: left;
+    width: 20%;
+    text-align: right;
+    padding-right: 10px;
+    margin-top: 10px;
+    color: #444444;
+    font-size: 16px;
+}
+#name, #roomNo, #image_url, #title, #description,#author, #url{
+    border: 1px solid #DADADA;
+    color: #888;
+    height: 20px;
+    margin-bottom: 16px;
+    margin-right: 6px;
+    margin-top: 2px;
+    outline: 0 none;
+    padding: 3px 3px 3px 5px;
+    width: 40%;
+    font-size: 12px;
+    line-height: 15px;
+    box-shadow: inset 0px 1px 4px #ECECEC;
+    -moz-box-shadow: inset 0px 1px 4px #ECECEC;
+    -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
+}
+
+.up-imgs, .connect-room{
+    margin:10px auto;
+    width:37%;
+    height:30%;
+    border:3px solid #C0C0C0;
+    border-radius:30px;
+    background: #F7F7F7;
+}
+.connect-room{
+    float: left;
+    position: relative;
+    left: 10%;
+}
+.up-imgs{
+    float: left;
+    position: relative;
+    left: 15%;
+}
+
 .scrolling {
     overflow: scroll;
     max-height: 40vh;

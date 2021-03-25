@@ -1,3 +1,4 @@
+
 var dataCacheName = 'chatroom-cache-v1';
 var cacheName = 'chatroom-step-8-1';
 var filesToCache = [

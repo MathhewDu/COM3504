@@ -1,7 +1,7 @@
 let name = null;
 let roomNo = null;
 let socket = io();
-let msgID = 0
+let msgID = 0;
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -15,12 +15,12 @@ function init() {
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
     initSocket();
 
-    if ('serviceWorker' in navigator) {
+    /*if ('serviceWorker' in navigator) {
         navigator.serviceWorker
             .register('./service-worker.js')
             .then(function() { console.log('Service Worker Registered'); });
     }
-    loadData(false);
+    loadData(false);*/
 }
 
 function initSocket(){
