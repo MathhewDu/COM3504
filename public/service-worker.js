@@ -51,7 +51,10 @@ self.addEventListener('fetch', function(event){
     //if the request is '/chatroom_data', post to the server - do not try to cache
     if(event.request.url.indexOf(dataUrl) > -1) {
         return fetch(event.request).then(function(response){
-            return response;
+            if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin'){
+                return response;
+            }
+            // return response;
         })
     } else {
         event.respondWith(
