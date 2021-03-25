@@ -180,7 +180,6 @@ async function getCanvasData(RoomAndUrl) {
         await initDatabase();
     if (cvsdb) {
         try {
-            console.log('fetching: '+RoomAndUrl);
             let tx = await cvsdb.transaction(CANVAS_STORE_NAME, 'readonly');
             let store = await tx.objectStore(CANVAS_STORE_NAME);
             let index = await store.index("RoomAndUrl");

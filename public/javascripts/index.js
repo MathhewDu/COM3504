@@ -40,6 +40,7 @@ function initSocket(){
         if(userId == name) who = 'Me';
         writeOnHistory('<b>' + who + ':</b> ' + chatText);
     });
+
 }
 
 /**

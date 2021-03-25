@@ -22,9 +22,10 @@ function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-
+    userId = document.getElementById('user');
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
+        PrintCanvas(ctx, roomNo + '+' + imageUrl)
         prevX = currX;
         prevY = currY;
         currX = e.clientX - canvas.position().left;
@@ -40,7 +41,7 @@ function initCanvas(sckt, imageUrl) {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 socket.emit('draw', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                console.log(room+userId+canvas.width+prevX+color);
+                //console.log(room+userId+canvas.width+prevX+color);
                 storeCanvasData(RoomAndUrl, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
 
                 // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
@@ -72,6 +73,7 @@ function initCanvas(sckt, imageUrl) {
         let poll = setInterval(function () {
             if (img.naturalHeight) {
                 clearInterval(poll);
+                PrintCanvas(ctx,roomNo+'+'+imageUrl)
                 // resize the canvas
                 let ratioX=1;
                 let ratioY=1;
