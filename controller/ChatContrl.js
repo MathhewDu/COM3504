@@ -12,10 +12,10 @@ user.save(function (err){
     }
     console.log("shuju zengjia chenggong");
 })
-// chatModel.find({},function (err,doc){
-//     if(err){
-//         console.log(err);
-//         return;
-//     }
-//     console.log(doc);
-// })
+chatModel.find({},function (err,doc){
+    if(err){
+        console.log(err);
+        return;
+    }
+    console.log(doc);
+})
