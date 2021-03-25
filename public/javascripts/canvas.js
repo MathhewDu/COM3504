@@ -22,7 +22,7 @@ function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-    userId = document.getElementById('name');
+    userId = document.getElementById('name').value;
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         PrintCanvas(ctx, roomNo + '+' + imageUrl)
@@ -40,7 +40,7 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                socket.emit('draw', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                socket.emit('draw', roomNo, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 //console.log(room+userId+canvas.width+prevX+color);
                 storeCanvasData(RoomAndUrl, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
 
