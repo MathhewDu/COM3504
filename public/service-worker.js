@@ -58,7 +58,7 @@ self.addEventListener('fetch', function(event){
         event.respondWith(
             caches.match(event.request).then(function(response){
                 return response
-                    || fetch(event.request).then(function (response){
+                    || fetch(event.request).then(function (response){//不能使用then 无法获得返回, socket.io属于长连接不会结束 所以没有then
                         if(!response.ok || response.statusCode>299){
                             console.log("error: " + response.error());
                         } else {
