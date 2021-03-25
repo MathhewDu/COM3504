@@ -48,13 +48,10 @@ self.addEventListener('activate', function(event){
 self.addEventListener('fetch', function(event){
     console.log('[ServiceWorker] Fetch', event.request.url);
     var dataUrl = '/';
-    //if the request is '/chatroom_data', post to the server - do not try to cache
-    if(event.request.url.indexOf(dataUrl) > -1) {
-        return fetch(event.request).then(function(response){
-            if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin'){
-                return response;
-            }
-            // return response;
+    //if the request is '/', post to the server - do not try to cache
+    if (event.request.url.indexOf(dataUrl) > -1) {
+        return fetch(event.request).then(function (response){
+            return response;
         })
     } else {
         event.respondWith(
