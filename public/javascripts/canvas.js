@@ -41,8 +41,11 @@ function initCanvas(sckt, imageUrl) {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 socket.emit('draw', roomNo, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                //console.log(room+userId+canvas.width+prevX+color);
                 storeCanvasData(RoomAndUrl, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                //console.log(room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                socket.on('draw', newDrawing);
+
+
 
                 // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
