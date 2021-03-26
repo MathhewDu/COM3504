@@ -38,7 +38,7 @@ function initSocket(){
     //called when a message is received
     socket.on('chat', function (room, userId, chatText){
         let who = userId
-        if(userId == name) who = 'Me';
+        if(userId == name) who = 'Me ';
         writeOnHistory('<b>' + who + ':</b> ' + chatText);
     });
 

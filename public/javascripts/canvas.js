@@ -40,15 +40,17 @@ function initCanvas(sckt, imageUrl) {
         if (e.type === 'mousemove') {
             if (flag) {
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                //sckt.emit('broadcast', 'hello friends!');
                 socket.emit('draw', roomNo, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 storeCanvasData(RoomAndUrl, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 //console.log(room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                socket.on('draw', newDrawing);
-
-
 
                 // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
+                socket.on('draw', function(room, userId, width, height, prevX, prevY, currX, currY, color, thickness){
+                    drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                    //console.log("here:"+ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                });
             }
         }
     });
@@ -96,6 +98,7 @@ function initCanvas(sckt, imageUrl) {
             }
         }, 10);
     });
+
 }
 
 /**

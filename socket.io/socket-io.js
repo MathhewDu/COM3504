@@ -19,6 +19,7 @@ exports.init = function(io) {
       });
       socket.on('draw', function(room, userId, width, height, prevX, prevY, currX, currY, color, thickness){
         io.sockets.to(room).emit('draw', room, userId, width, height, prevX, prevY, currX, currY, color, thickness);
+        //console.log(room,userId);
       });
     } catch (e) {
     }
