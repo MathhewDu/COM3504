@@ -45,6 +45,9 @@ button{
     margin-right: auto;
     margin-bottom: 10px;
 }
+.center{
+    text-align: center;
+}
 #connect{
     width: 100%;
     background:#E27575;
@@ -52,6 +55,10 @@ button{
 #upload{
     width: 100%;
     background:#459d36;
+}
+#upload2{
+    width: 100%;
+    background:#AAAAAA;
 }
 #initial_form{
     margin:100px auto;
@@ -88,7 +95,7 @@ label{
     -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
 }
 
-.up-imgs, .connect-room{
+.up-imgs, .connect-room, .up-imgToMongo{
     margin:10px auto;
     width:37%;
     height:30%;

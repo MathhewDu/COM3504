@@ -59,7 +59,62 @@
 
         </form>
     </div>
+    <div class="up-imgToMongo">
+<!--        <form action="doAdd" method="post" enctype="multipart/form-data">-->
+        <form action="doAdd" method="post" enctype="multipart/form-data">
+            <p><h1>Upload to server</h1></p>
+            <h3>Please write the author, title, and description</h3>
+            <p><label for="title"> Image's title </label>
+                <input type="text" id="title" name="title">
+            </p>
+            <p>
+                <label for="description"> Description </label>
+                <input type="text" id="description" name="description">
+            </p>
+            <p>
+                <label for="author"> Author </label>
+                <input type="text" id="author" name="author">
+            </p>
+            <p class="center">
+                <input type="file" name="pic" id="pic">
+<!--                <label for="url"> Image (URL) </label><input type="text" id="url" name="url">-->
+            </p>
+            <div class="btdiv">
+                <button id="upload2" type="submit">Upload</button>
+            </div>
+        </form>
+    </div>
 
+<!--    <div id="upload_img" style="display: block">-->
+<!--        <form action="doAdd" method="post" enctype="multipart/form-data">-->
+<!--            <p><h1>Upload Image</h1></p>-->
+<!--            <h3>Please write the author, title, and description</h3>-->
+<!--            <p><label for="title"> Image's title </label>-->
+<!--                <input type="text" id="title" name="title">-->
+<!--            </p>-->
+<!--&lt;!&ndash;            Title:<input type="text" name="title" id="title">&ndash;&gt;-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <p>-->
+<!--                <label for="description"> Description </label>-->
+<!--                <input type="text" id="description" name="description">-->
+<!--            </p>-->
+<!--&lt;!&ndash;            Describe:<textarea name="desc" id="desc" cols="30" rows="10"></textarea>&ndash;&gt;-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <p>-->
+<!--                <label for="author"> Author </label>-->
+<!--                <input type="text" id="author" name="author">-->
+<!--            </p>-->
+<!--            Pictures:<input type="file" name="pic" id="pic">-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <div class="btdiv">-->
+<!--                <button id="upload2" type="submit">Upload</button>-->
+<!--            </div>-->
+<!--&lt;!&ndash;            <input type="submit" value="submit">&ndash;&gt;-->
+<!--        </form>-->
+<!--    </div>-->
 </div>
 <div id="chat_interface" style="display: none">
     <div>
