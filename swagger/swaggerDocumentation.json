@@ -1,0 +1,235 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Intelligent Web",
+    "description": "Assignment",
+    "termsOfService": "http://api_url/terms/",
+    "contact": {
+      "name": "COM3504_team_dzz",
+      "url": "http://shef.ac.uk",
+      "email": "cdu7@sheffield.ac.uk"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "the only Local server"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": [
+          "Exchange information using images and text"
+        ],
+        "description": "information is in the form of images and annotations",
+        "operationId": "image data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/imageObject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Correct input of Child structure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/imageObject"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "no image data provided",
+                  "internal_code": "missing_parameters"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "roomNo": {
+        "type": "integer",
+        "description": "the room number that user in, can be generated randomly",
+        "example": 1
+      },
+      "user": {
+        "type": "string",
+        "example": "Tom"
+      },
+      "msgID": {
+        "type": "integer",
+        "description": "a number recorded for each message",
+        "example": 4
+      },
+      "msg": {
+        "type": "string",
+        "description": "the message that user send",
+        "example": "hello world!"
+      },
+      "url": {
+        "type": "string",
+        "description": "the image url",
+        "example": "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg"
+      },
+      "title": {
+        "type": "string",
+        "description": "title for a image",
+        "example": "google"
+      },
+      "description": {
+        "type": "string",
+        "description": "description for a image",
+        "example": "a google image"
+      },
+      "author": {
+        "type": "string",
+        "description": "the author for a image",
+        "example": "John"
+      },
+      "RoomAndUrl": {
+        "type": "string",
+        "description": "record the room number and image url for canvas",
+        "example": "001+image2.jpg"
+      },
+      "width": {
+        "type": "integer",
+        "description": "the canvas width",
+        "example": 644
+      },
+      "height": {
+        "type": "integer",
+        "description": "the canvas height",
+        "example": 362
+      },
+      "prevX": {
+        "type": "integer",
+        "example": 268
+      },
+      "prevY": {
+        "type": "integer",
+        "example": 108
+      },
+      "currX": {
+        "type": "integer",
+        "example": 269
+      },
+      "currY": {
+        "type": "integer",
+        "example": 109
+      },
+      "color": {
+        "type": "string",
+        "description": "the pen color",
+        "example": "red"
+      },
+      "thickness": {
+        "type": "integer",
+        "description": "the pen thickness",
+        "example": 4
+      },
+      "imageObject": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "$ref": "#/components/schemas/url"
+          },
+          "title": {
+            "$ref": "#/components/schemas/title"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          },
+          "author": {
+            "$ref": "#/components/schemas/author"
+          }
+        },
+        "example": "{url: https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/evolving_google_identity_2x1.jpg, title: google,  description: a google image,  author: John}"
+      },
+      "chatdata": {
+        "type": "object",
+        "properties": {
+          "roomNo": {
+            "$ref": "#/components/schemas/roomNo"
+          },
+          "user": {
+            "$ref": "#/components/schemas/user"
+          },
+          "msgID": {
+            "$ref": "#/components/schemas/msgID"
+          },
+          "msg": {
+            "$ref": "#/components/schemas/msg"
+          }
+        },
+        "example": "{roomNo:001, user: Tom,  msgID: 004,  msg: hello world}"
+      },
+      "canvasdata": {
+        "type": "object",
+        "properties": {
+          "RoomAndUrl": {
+            "$ref": "#/components/schemas/RoomAndUrl"
+          },
+          "width": {
+            "$ref": "#/components/schemas/width"
+          },
+          "height": {
+            "$ref": "#/components/schemas/height"
+          },
+          "prevX": {
+            "$ref": "#/components/schemas/prevX"
+          },
+          "prevY": {
+            "$ref": "#/components/schemas/prevY"
+          },
+          "currX": {
+            "$ref": "#/components/schemas/currX"
+          },
+          "currY": {
+            "$ref": "#/components/schemas/currY"
+          },
+          "color": {
+            "$ref": "#/components/schemas/color"
+          },
+          "thickness": {
+            "$ref": "#/components/schemas/thickness"
+          }
+        },
+        "example": "{RoomAndUrl:001+image2.jpg, width: 644,  height: 362,  prevX: 268 , prevY: 108, currX: 269,  currY: 109,  color: red, thickness: 4}"
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "internal_code": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

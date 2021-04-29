@@ -61,6 +61,9 @@ function generateRoom() {
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     // @todo send the chat message
+    if (chatText.indexOf(".png") != -1 || chatText.indexOf(".jpg") != -1){
+        changeImg(chatText,roomNo,name);
+    }
     socket.emit('chat', roomNo, name, chatText);
     createMsgID(roomNo,name,chatText);
 }
@@ -96,7 +99,15 @@ function writeOnHistory(text) {
     history.scrollTop = history.scrollHeight;
     document.getElementById('chat_input').value = '';
 }
-
+function cleartext() {
+    let history = document.getElementById('history');
+    let paragraph = document.createElement('p');
+    paragraph.innerHTML = text;
+    history.appendChild(paragraph);
+    // scroll to the last element
+    history.scrollTop = history.scrollHeight;
+    document.getElementById('chat_input').value = '';
+}
 /**
  * it hides the initial form and shows the chat
  * @param room the selected room
@@ -162,6 +173,9 @@ function createAjaxQuery() {
     // prevent the form from reloading the page (normal behaviour for forms)
     //event.preventDefault()
 }
+
+
+
 function gohome()
 {
     window.location.href=".."

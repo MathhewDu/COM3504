@@ -236,3 +236,35 @@ async function PrintCanvas(ctx,RoomAndUrl) {
         }
 }
 window.PrintCanvas=PrintCanvas;
+
+async function Remove() {
+    var req = indexedDB.deleteDatabase('db_chat_1');
+    var req2 = indexedDB.deleteDatabase('db_canvas_1');
+    req.onsuccess = function () {
+        console.log("Deleted database successfully");
+    };
+    req.onerror = function () {
+        console.log("Couldn't delete database");
+    };
+    req.onblocked = function () {
+        console.log("Couldn't delete database due to the operation being blocked");
+    };
+    req2.onsuccess = function () {
+        console.log("Deleted database successfully");
+    };
+    req2.onerror = function () {
+        console.log("Couldn't delete database");
+    };
+    req2.onblocked = function () {
+        console.log("Couldn't delete database due to the operation being blocked");
+    };
+}
+window.Remove=Remove;
+
+async function changeImg(imgurl,room,name) {
+    socket.emit('create or join', room, name);
+    hideLoginInterface(87987894984945461681819197, name);
+    Remove();
+    socket.emit('create or join', room, name);
+}
+window.changeImg=changeImg;
