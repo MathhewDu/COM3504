@@ -130,6 +130,7 @@ function sendAjaxQuery(url,data) {
             // in order to have the object printed by alert
             // we need to JSON.stringify the object
             storeImageData(url,dataR);
+            // document.getElementById('results').innerHTML= JSON.stringify(ret);
         },
         error: function (response) {
             // the error structure we passed is in the field responseText
@@ -143,11 +144,45 @@ function sendAjaxQuery(url,data) {
 }
 
 /**
+ * Ajax query to mongodb
+ * @param url
+ * @param data
+ */
+function sendAjaxQueryToDB(url,data) {
+    $.ajax({
+        url: url ,
+        data: JSON.stringify(data),
+        // contentType: 'application/json',
+        dataType: 'json',
+        type: 'POST',
+        success: function (dataR) {
+            // no need to JSON parse the result, as we are using
+            // dataType:json, so JQuery knows it and unpacks the
+            // object for us before returning it
+            // in order to have the object printed by alert
+            // we need to JSON.stringify the object
+            // storeImageData(url,dataR);
+            // var ret = dataR
+            // document.getElementById('author').innerHTML= JSON.stringify(ret);
+            console.log(dataR)
+        },
+        timeout:3000,
+        error: function (response) {
+            // the error structure we passed is in the field responseText
+            // it is a string, even if we returned as JSON
+            // if you want o unpack it you must do:
+            // const dataR= JSON.parse(response.responseText)
+            alert (response.responseText);
+        }
+
+    });
+}
+/**
  * called when the submit button is pressed
  * @param event the submission event
  */
 function createAjaxQuery() {
-    let title = document.getElementById('description').value;
+    let title = document.getElementById('title').value;
     let description = document.getElementById('description').value;
     let url = document.getElementById('url').value;
     let author = document.getElementById('author').value;
@@ -162,6 +197,25 @@ function createAjaxQuery() {
     // prevent the form from reloading the page (normal behaviour for forms)
     //event.preventDefault()
 }
+
+function onSubmit(url) {
+    // let formArray= $("form").serializeArray();
+    // let data={};
+    // for (let index in formArray){
+    //     data[formArray[index].name]= formArray[index].value;
+    // }
+    // const data = JSON.stringify($(this).serializeArray());
+    let title = document.getElementById('title').value;
+    let description = document.getElementById('description').value;
+    let author = document.getElementById('author').value;
+    const data={};
+    data['title']= title;
+    data['description'] = description;
+    data['author'] = author;
+    sendAjaxQueryToDB(url, data);
+    // event.preventDefault();
+}
+
 function gohome()
 {
     window.location.href=".."

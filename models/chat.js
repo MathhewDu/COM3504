@@ -4,11 +4,18 @@ let Schema = mongoose.Schema;
 
 let ChatSchema = new Schema(
     {
-        name: {type: String, max: 100},//required: true,
-        room: {type: String, max: 100},//required: true,
-        URL: {type: String},
+        ImageTitle: {type: String, max: 20},//required: true,
+        Description: {type: String, max: 100},//required: true,
+        Author: {type: String},
+        Url:{type: String}
         // whatever: {type: String} //any other field
     }
+    // {
+    //     name: {type: String, max: 100},//required: true,
+    //     room: {type: String, max: 100},//required: true,
+    //     URL: {type: String},
+    //     // whatever: {type: String} //any other field
+    // }
 );
 
 // Virtual for a character's age

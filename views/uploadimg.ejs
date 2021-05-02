@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,28 +12,28 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="/javascripts/app.js"></script>
-<!--    <script>-->
-<!--        const text = document.getElementById('author')-->
+    <!--    <script>-->
+    <!--        const text = document.getElementById('author')-->
 
-<!--        window.onkeydown = function (){-->
-<!--            const xhr = new XMLHttpRequest();-->
-<!--            xhr.open('POST','http://localhost:3000/doAdd');-->
-<!--            xhr.send();-->
-<!--            xhr.onreadystatechange = function(){-->
-<!--                if(xhr.readyState === 4 ){-->
-<!--                    if (xhr.status >=200 && xhr.status<=300){-->
-<!--                        text.innerHTML = xhr.res;-->
-<!--                    }-->
-<!--                }-->
-<!--            }-->
-<!--        }-->
-<!--    </script>-->
+    <!--        window.onkeydown = function (){-->
+    <!--            const xhr = new XMLHttpRequest();-->
+    <!--            xhr.open('POST','http://localhost:3000/doAdd');-->
+    <!--            xhr.send();-->
+    <!--            xhr.onreadystatechange = function(){-->
+    <!--                if(xhr.readyState === 4 ){-->
+    <!--                    if (xhr.status >=200 && xhr.status<=300){-->
+    <!--                        text.innerHTML = xhr.res;-->
+    <!--                    }-->
+    <!--                }-->
+    <!--            }-->
+    <!--        }-->
+    <!--    </script>-->
 </head>
 <body onload="init()">
 <div id="initial_form" style="display: block">
     <div class="connect-room">
         <form onsubmit="return false;">
-            <h1><%= title %></h1>
+            <h1>image browsing</h1>
             <h3 id="hint">Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</h3>
             <p><label for="name"> Your name </label>
                 <input type="text" id="name" name="name">
@@ -76,11 +76,11 @@
         </form>
     </div>
     <div class="up-imgToMongo">
-<!--        <form action="doAdd" method="post" enctype="multipart/form-data">-->
-<!--        onsubmit="onSubmit('/doAdd')"
-        enctype="multipart/form-data"
--->
-        <form action="/" method="post" enctype="multipart/form-data">
+        <!--        <form action="doAdd" method="post" enctype="multipart/form-data">-->
+        <!--        onsubmit="onSubmit('/doAdd')"
+                enctype="multipart/form-data"
+        -->
+        <form action="/imgUpload" method="post" enctype="multipart/form-data">
             <p><h1>Upload to server</h1></p>
             <h3>Please write the author, title, and description</h3>
             <p><label for="title"> Image's title </label>
@@ -96,28 +96,31 @@
             </p>
             <p class="center">
                 <input type="file" name="pic" id="pic">
-<!--                <label for="url"> Image (URL) </label><input type="text" id="url" name="url">-->
+                <!--                <label for="url"> Image (URL) </label><input type="text" id="url" name="url">-->
             </p>
             <div class="btdiv">
-<!--                <button id="upload2" type="submit" onclick="onSubmit('/doAdd')">Upload2</button>-->
+                <!--                <button id="upload2" type="submit" onclick="onSubmit('/doAdd')">Upload2</button>-->
                 <button id="upload3" type="submit" >Upload3</button>
-<!--                onclick="onSubmit('/index')"-->
+                <!--                onclick="onSubmit('/index')"-->
             </div>
             <div id="results" style="margin-top:30px"></div>
         </form>
+        <img src="/images/1618319729938.png" width="160px" height="160px">
+
+
     </div>
 
 </div>
 <div id="chat_interface" style="display: none">
     <div>
-    <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
+        <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
     </div>
     </p>
     <div style="width: 100%; height: 50vh">
-            <img id="image" height="100%" >
-            <canvas  id="canvas" ></canvas>
+        <img id="image" height="100%" >
+        <canvas  id="canvas" ></canvas>
     </div>
-<!--    </div>-->
+    <!--    </div>-->
     <div id="history" style="height: 35vh" class="boxed scrolling" ></div>
 
     <div id="input" style="height: 5vh" class=" boxed">
