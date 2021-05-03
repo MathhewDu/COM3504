@@ -56,9 +56,10 @@ button{
     width: 100%;
     background:#459d36;
 }
-#upload2{
+#upload3{
     width: 100%;
     background:#AAAAAA;
+    color: #ECECEC;
 }
 #initial_form{
     margin:100px auto;
@@ -78,7 +79,7 @@ label{
     color: #444444;
     font-size: 16px;
 }
-#name, #roomNo, #image_url, #title, #description,#author, #url{
+input{
     border: 1px solid #DADADA;
     color: #888;
     height: 20px;
