@@ -10,9 +10,10 @@ exports.insert = function (req, res) {
             ImageTitle:userData.title,
             Description:userData.description,
             Author:userData.author,
-            Url: "null"
+            BaseCode: userData.BaseCode
         });
         console.log('receivedhhhh: ' + chat);
+        // printbase64();
 
         chat.save(function (err) {
             // console.log(results._id);

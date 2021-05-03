@@ -6,6 +6,7 @@ let socket = io();
  * it initialises the interface and the expected socket messages
  * plus the associated actions
  */
+let base64Info = "";
 function init() {
     // it sets up the interface so that userId and room are selected
     document.getElementById('initial_form').style.display = 'block';
@@ -108,6 +109,24 @@ function hideLoginInterface(room, userId) {
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
 }
+function imgChange(event){
+    console.info(event.target.files[0]);// picture file
+    var dom = $("input[id='picBase64']")[0];
+    // console.info(dom.value);//path
+    // console.log(event.target.value);// path
+    var reader = new FileReader();
+    reader.onload = (function (file){
+        return function (event){
+            // console.info(this.result);//base64
+            var sss = $("#showImage");
+            base64Info = this.result;
+            $("#showImage")[0].src = this.result;
+            // $("#base64Data")[0].content = this.result;
+
+        };
+    })(event.target.files[0]);
+    reader.readAsDataURL(event.target.files[0])
+    document.getElementById('showImage').style.display = 'block'}
 
 
 
@@ -127,76 +146,25 @@ function sendAjaxQuery(url,data) {
             // no need to JSON parse the result, as we are using
             // dataType:json, so JQuery knows it and unpacks the
             // object for us before returning it
+            var ret = dataR;
             // in order to have the object printed by alert
             // we need to JSON.stringify the object
-            storeImageData(url,dataR);
-            // document.getElementById('results').innerHTML= JSON.stringify(ret);
+            document.getElementById('results').innerHTML= JSON.stringify(ret);
         },
-        error: function (response) {
+        error: function (xhr, status, error) {
             // the error structure we passed is in the field responseText
             // it is a string, even if we returned as JSON
             // if you want o unpack it you must do:
             // const dataR= JSON.parse(response.responseText)
-            alert (response.responseText);
+            alert ('Error: '+ error.message);
         }
-
     });
 }
 
-/**
- * Ajax query to mongodb
- * @param url
- * @param data
- */
-function sendAjaxQueryToDB(url,data) {
-    $.ajax({
-        url: url ,
-        data: JSON.stringify(data),
-        // contentType: 'application/json',
-        dataType: 'json',
-        type: 'POST',
-        success: function (dataR) {
-            // no need to JSON parse the result, as we are using
-            // dataType:json, so JQuery knows it and unpacks the
-            // object for us before returning it
-            // in order to have the object printed by alert
-            // we need to JSON.stringify the object
-            // storeImageData(url,dataR);
-            // var ret = dataR
-            // document.getElementById('author').innerHTML= JSON.stringify(ret);
-            console.log(dataR)
-        },
-        timeout:3000,
-        error: function (response) {
-            // the error structure we passed is in the field responseText
-            // it is a string, even if we returned as JSON
-            // if you want o unpack it you must do:
-            // const dataR= JSON.parse(response.responseText)
-            alert (response.responseText);
-        }
-
-    });
-}
 /**
  * called when the submit button is pressed
  * @param event the submission event
  */
-function createAjaxQuery() {
-    let title = document.getElementById('title').value;
-    let description = document.getElementById('description').value;
-    let url = document.getElementById('url').value;
-    let author = document.getElementById('author').value;
-    const data={};
-    data['url'] = url
-    data['title']= title;
-    data['description'] = description;
-    data['author'] = author;
-
-    // const data = JSON.stringify($(this).serializeArray());
-    sendAjaxQuery(url,data);
-    // prevent the form from reloading the page (normal behaviour for forms)
-    //event.preventDefault()
-}
 
 function onSubmit(url) {
     // let formArray= $("form").serializeArray();
@@ -205,15 +173,21 @@ function onSubmit(url) {
     //     data[formArray[index].name]= formArray[index].value;
     // }
     // const data = JSON.stringify($(this).serializeArray());
-    let title = document.getElementById('title').value;
-    let description = document.getElementById('description').value;
-    let author = document.getElementById('author').value;
-    const data={};
-    data['title']= title;
-    data['description'] = description;
-    data['author'] = author;
-    sendAjaxQueryToDB(url, data);
-    // event.preventDefault();
+    let formArray= $("#upForm").serializeArray();
+    formArray.push({"name": "BaseCode", "value":base64Info});
+    console.log(formArray);
+
+    let data={};
+    for (let index in formArray){
+        data[formArray[index].name]= formArray[index].value;
+    }
+    // const data = JSON.stringify($(this).serializeArray());
+    console.log(data);
+    // data.push({"baseCode": "easf"});
+    // console.log(data);
+    // console.log(base64Info)
+    sendAjaxQuery(url, data);
+    event.preventDefault();
 }
 
 function gohome()

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    <title><%= title %></title>
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -33,7 +33,7 @@
 <div id="initial_form" style="display: block">
     <div class="connect-room">
         <form onsubmit="return false;">
-            <h1>image browsing</h1>
+            <h1><%= title %></h1>
             <h3 id="hint">Please insert the id of the Room you want to Join, if you do not have a room id, click Generate Room</h3>
             <p><label for="name"> Your name </label>
                 <input type="text" id="name" name="name">
@@ -80,83 +80,36 @@
         <!--        onsubmit="onSubmit('/doAdd')"
                 enctype="multipart/form-data"
         -->
-        <form id="uploadForm" action="/imgUpload" method="post" enctype="multipart/form-data">
+        <form method="post" id="upForm" onsubmit="onSubmit('/doAdd')">
             <p><h1>Upload to server</h1></p>
             <h3>Please write the author, title, and description</h3>
-            <p><label for="title"> Image's title </label>
+            <p><label for="title1"> Image's title </label>
                 <input type="text" id="title1" name="title">
             </p>
             <p>
-                <label for="description"> Description </label>
+                <label for="description1"> Description </label>
                 <input type="text" id="description1" name="description">
             </p>
             <p>
-                <label for="author"> Author </label>
+                <label for="author1"> Author </label>
                 <input type="text" id="author1" name="author">
             </p>
+
             <p class="center">
-                <input type="file" name="pic" id="pic">
-                <!--                <label for="url"> Image (URL) </label><input type="text" id="url" name="url">-->
+                <input type="file" name="picBase64" id="picBase64" onchange="imgChange(event)" accept=".gif,.jpg,.jpeg,.png">
             </p>
+            <img src="" id="showImage" alt="" height="160px" width="160px" style="display: none">
+
             <div class="btdiv">
-                <!--                <button id="upload2" type="submit" onclick="onSubmit('/doAdd')">Upload2</button>-->
-<!--                <button id="upload3" onclick="onSubmit('/doAdd')">Upload3</button>-->
-                <br>
-                <br>
-                <br>
-                <br>
-                <div class="btn">upload</div>
+<!--                <button id="upload3" type="submit" >Upload3</button>-->
+                <p><input type="submit" value="Submit" id="upload3"></p>
                 <!--                onclick="onSubmit('/index')"-->
             </div>
-            <div id="results" style="margin-top:30px"></div>
+            <div id="results" style="margin-top:30px">hhh</div>
         </form>
-        <div>
-            <h3>yulan</h3>
-            <img id="preview" src="">
-        </div>
     </div>
-</div>
-<script>
-    let formDataObj = new FormData()
-    let file;
-    // $('#title').change(function(e){
-    //     console.log($('#uploadForm'))
-    // })
-    // $("#btn1").click(function(){
-    //     alert("Text: " + $("#test").text());
-    // });
-    $('#pic').change(function (e){
-    console.log($('#uploadForm'))
-        console.log(this.files)
-        file = this.files[0]
-        //preview image before upload
-        let httpUrl = window.webkitURL.createObjectURL(file)
-        $('#preview').attr("src", httpUrl);
-        formDataObj = new FormData()
-        //create formdata object, put image file into it
-        // let title = document.getElementById('title').value;
-        // formDataObj.append("title", title);
-        formDataObj.append("pic", file);
-        // console.log(document.getElementById('title1').value)
-    })
-    $('.btn').click(function (){
-        // onSubmit('/imgUpload')
-        // const chat = require('../controller/ChatContrl');
-        // chat.insert;
-        console.log("Text: " + document.getElementById('title1').value)
-        $.ajax({
-            url:"/imgUpload",
-            method:"POST",
-            data: formDataObj,
-            processData: false,
-            contentType: false
-        }).then(function (res){
-            console.log(res)
-            $('body').append(`<h1>shangchuan chenggong</h1><img src='${res.imgUrl}'>`)
-        })
 
-    })
-</script>
+</div>
 <div id="chat_interface" style="display: none">
     <div>
         <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
