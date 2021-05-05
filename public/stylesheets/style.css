@@ -45,6 +45,13 @@ button{
     margin-right: auto;
     margin-bottom: 10px;
 }
+.myRow {
+    display:inline-block;
+}
+.resultPanel{
+    border: dotted gray 1px;
+    padding:10px
+}
 #connect{
     width: 100%;
     background:#E27575;

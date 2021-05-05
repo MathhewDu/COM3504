@@ -2,6 +2,8 @@
 <html>
 <head>
     <title><%= title %></title>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -70,6 +72,31 @@
             <img id="image" height="100%" >
             <canvas  id="canvas" ></canvas>
     </div>
+
+
+    <div class="myRow" id="widget">
+        <label for="myInput">Search for </label><input type="text" id="myInput">
+
+    </div>
+    <div class="myRow" id="typeForm">
+        <label for="myType"> of type</label><input type="text" id="myType">
+    </div>
+
+    <div>
+        <div class='resultPanel' id="resultPanel" style="display: none">
+            <h2 id="resultName"></h2>
+            <h4 id="resultId"></h4>
+            <div id="resultDescription"></div>
+            <div>
+                <a id="resultUrl" target="_blank">
+                    Link to Webpage
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <!--    </div>-->
     <div id="history" style="height: 35vh" class="boxed scrolling" ></div>
 
