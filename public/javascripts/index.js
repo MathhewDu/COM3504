@@ -126,7 +126,8 @@ function imgChange(event){
         };
     })(event.target.files[0]);
     reader.readAsDataURL(event.target.files[0])
-    document.getElementById('showImage').style.display = 'block'}
+    document.getElementById('showImage').style.display = 'block'
+}
 
 
 
@@ -137,7 +138,7 @@ function imgChange(event){
  */
 function sendAjaxQuery(url,data) {
     $.ajax({
-        url: '/' ,
+        url: url ,
         data: JSON.stringify(data),
         contentType: 'application/json',
         dataType: 'json',
@@ -149,7 +150,7 @@ function sendAjaxQuery(url,data) {
             var ret = dataR;
             // in order to have the object printed by alert
             // we need to JSON.stringify the object
-            document.getElementById('results').innerHTML= JSON.stringify(ret);
+
         },
         error: function (xhr, status, error) {
             // the error structure we passed is in the field responseText
@@ -167,12 +168,7 @@ function sendAjaxQuery(url,data) {
  */
 
 function onSubmit(url) {
-    // let formArray= $("form").serializeArray();
-    // let data={};
-    // for (let index in formArray){
-    //     data[formArray[index].name]= formArray[index].value;
-    // }
-    // const data = JSON.stringify($(this).serializeArray());
+
     let formArray= $("#upForm").serializeArray();
     formArray.push({"name": "BaseCode", "value":base64Info});
     console.log(formArray);

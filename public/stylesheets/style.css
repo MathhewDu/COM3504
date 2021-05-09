@@ -1,3 +1,7 @@
+/**{*/
+/*    margin: 0px;*/
+/*    padding: 0px;*/
+/*}*/
 body {
     font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -64,8 +68,7 @@ button{
 #initial_form{
     margin:100px auto;
     width:80%;
-    height:30%;
-    /*border:3px solid #C0C0C0;*/
+    /*height:30%;*/
     float: left;
     position: relative;
     left: 10%;
@@ -96,24 +99,45 @@ input{
     -webkit-box-shadow: inset 0px 1px 4px #ECECEC;
 }
 
-.up-imgs, .connect-room, .up-imgToMongo{
+#up-imgs, #connect-room, #showData{
     margin:10px auto;
-    width:37%;
+    width:30%;
     height:30%;
     border:3px solid #C0C0C0;
     border-radius:30px;
     background: #F7F7F7;
-}
-.connect-room{
     float: left;
     position: relative;
-    left: 10%;
 }
-.up-imgs{
-    float: left;
-    position: relative;
+#connect-room{
     left: 15%;
 }
+#up-imgs{
+    left: 20%;
+}
+
+#showData{
+    width: 100%;
+    /*margin: 0 auto;*/
+}
+.box{
+    padding: 5px;
+    float: left;
+    border: 1px solid #cccccc;
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 5px;
+}
+#box_img{
+    padding: 5px;
+    border: 1px solid #cccccc;
+    box-shadow: 0 0 5px #ccc;
+    border-radius: 5px;
+}
+#box_img img{
+    width: 150px;
+    height: auto;
+}
+
 
 .scrolling {
     overflow: scroll;
