@@ -29,6 +29,6 @@ let ChatSchema = new Schema(
 // Character.set('toObject', {getters: true, virtuals: true});
 
 //model for do action on database
-let chatModel = mongoose.model('Chat', ChatSchema, 'chat' );
+let     chatModel = mongoose.model('Chat', ChatSchema, 'chat' );
 
 module.exports = chatModel;

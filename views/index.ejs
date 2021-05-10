@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
-<!--    <script src="/javascripts/layout.js"></script>-->
 
     <!-- Latest compiled JavaScript -->
     <script src="/javascripts/app.js"></script>
@@ -42,7 +41,7 @@
 
     <div id="up-imgs" >
         <form method="post" id="upForm" onsubmit="onSubmit('/')">
-            <p><h1>Upload to server</h1></p>
+            <p><h1>Upload to server</h1>
             <h3>Please write the author, title, and description</h3>
             <p><label for="title1"> Image's title </label>
                 <input type="text" id="title1" name="title">
@@ -71,17 +70,35 @@
     <div id="showData">
         <% testData.forEach(function (chatModel){ %>
         <div class="box">
-            <h4>show images here</h4>
+            <h1>INFO:</h1>
             <div id="box_img">
                 <img src="<%= chatModel.BaseCode %>" id="images" alt="">
             </div>
-            <p>Title:<%= chatModel.ImageTitle %></p>
-            <p>Description:<%= chatModel.Description %></p>
-            <p>Author:<%= chatModel.Author %></p>
+            <p class="imgP">Title:  <%= chatModel.ImageTitle %></p>
+            <p class="imgP">Description:  <%= chatModel.Description %></p>
+            <p class="imgP">Author:  <%= chatModel.Author %></p>
+            <p class="imgP">URL: <input value="<%= chatModel.BaseCode %>"></p>
+<!--            <p class="imgP"><button class="copyBtn" data-clipboard-text="<%= chatModel.BaseCode %>">点击复制内容</button></p>-->
+
+
+
 
         </div>
         <%})%>
     </div>
+<!--    <script>-->
+<!--        var clipboard = new ClipboardJS('#btn');-->
+<!--        var btn = document.getElementById('btn');-->
+<!--        // var clipboard = new Clipboard(btn);-->
+
+<!--        clipboard.on('success', function(e) {-->
+<!--            console.log(e);-->
+<!--        });-->
+
+<!--        clipboard.on('error', function(e) {-->
+<!--            console.log(e);-->
+<!--        });-->
+<!--    </script>-->
 
 </div>
 <div id="chat_interface" style="display: none">
