@@ -46,29 +46,57 @@ self.addEventListener('activate', function(event){
 /**
  * fetch: when the worker receives a fetch request
  **/
-self.addEventListener('fetch', function(event){
+
+self.addEventListener('fetch',function(event){
     console.log('[ServiceWorker] Fetch', event.request.url);
     var dataUrl = '/';
-    //if the request is '/', post to the server - do not try to cache
-    if (event.request.url.indexOf(dataUrl) > -1) {
+    if(event.request.url.indexOf(dataUrl) > -1){
         return fetch(event.request).then(function (response){
             return response;
+        }).catch(function(err){
+            console.log("service worker error:  "+err.message);
         })
-    } else {
-        event.respondWith(
-            caches.match(event.request).then(function(response){
-                return response
-                    || fetch(event.request).then(function (response){//不能使用then 无法获得返回, socket.io属于长连接不会结束 所以没有then
-                        if(!response.ok || response.statusCode>299){
-                            console.log("error: " + response.error());
-                        } else {
-                            caches.add(response.clone());
-                            return response;
-                        }
-                    }).catch(function(err){
-                        console.log("error: "+err);
-                    })
-            })
-        );
+    }else{
+        event.respondWith(async function(){
+            const cache = await caches.open('chatroom');
+            const cachedResponse = await cache.match(event.request);
+            const networkResponsePromise = fetch(event.request);
+
+            event.waitUntil(async function(){
+                const networkResponse = await networkResponsePromise;
+                await cache.put(event.request, networkResponse.clone());
+            }());
+
+            return cachedResponse || networkResponsePromise;
+        }());
     }
 });
+
+
+// self.addEventListener('fetch', function(event){
+//     console.log('[ServiceWorker] Fetch', event.request.url);
+//     var dataUrl = '/';
+//     //if the request is '/', post to the server - do not try to cache
+//     if (event.request.url.indexOf(dataUrl) > -1) {
+//         return fetch(event.request).then(function (response){
+//             return response;
+//         })
+//     } else {
+//         event.respondWith(
+//             caches.match(event.request).then(function(response){
+//                 return response
+//                     || fetch(event.request)
+//                         .then(function (response){//不能使用then 无法获得返回, socket.io属于长连接不会结束 所以没有then
+//                         if(!response.ok || response.statusCode>299){
+//                             console.log("error: " + response.error());
+//                         } else {
+//                             caches.add(response.clone());
+//                             return response;
+//                         }
+//                     }).catch(function(err){
+//                         console.log("error: "+err);
+//                     })
+//             })
+//         );
+//     }
+// });

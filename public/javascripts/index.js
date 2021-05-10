@@ -1,6 +1,8 @@
 let name = null;
 let roomNo = null;
 let socket = io();
+const service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
+const apiKey= 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -21,6 +23,31 @@ function init() {
     //         .then(function() { console.log('Service Worker Registered'); });
     // }
     // loadData(false);
+
+    let type= document.getElementById("myType").value;
+
+    let config = {
+        'limit': 10,
+        'languages': ['en'],
+        'types': [type],
+        'maxDescChars': 100,
+        'selectHandler': selectItem,
+    }
+    KGSearchWidget(apiKey, document.getElementById("myInput"), config);
+    //document.getElementById('widget').style.display='block';
+
+}
+
+function selectItem(event){
+    let row= event.row;
+    //document.getElementById('resultImage').src= row.json.image.url;
+    document.getElementById('resultId').innerText= 'id: '+row.id;
+    document.getElementById('resultName').innerText= row.name;
+    document.getElementById('resultDescription').innerText= row.rc;
+    document.getElementById("resultUrl").href= row.qc;
+    document.getElementById('resultPanel').style.display= 'block';
+    //document.getElementById('resultPanel').innerHTML= '<PRE>'+JSON.stringify(row, null, 4)+'</PRE>';
+
 }
 
 function initSocket(){
@@ -62,6 +89,9 @@ function generateRoom() {
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
     // @todo send the chat message
+    if (chatText.indexOf(".png") != -1 || chatText.indexOf(".jpg") != -1){
+        changeImg(chatText,roomNo,name);
+    }
     socket.emit('chat', roomNo, name, chatText);
     createMsgID(roomNo,name,chatText);
 }
@@ -97,7 +127,15 @@ function writeOnHistory(text) {
     history.scrollTop = history.scrollHeight;
     document.getElementById('chat_input').value = '';
 }
-
+function cleartext() {
+    let history = document.getElementById('history');
+    let paragraph = document.createElement('p');
+    paragraph.innerHTML = text;
+    history.appendChild(paragraph);
+    // scroll to the last element
+    history.scrollTop = history.scrollHeight;
+    document.getElementById('chat_input').value = '';
+}
 /**
  * it hides the initial form and shows the chat
  * @param room the selected room
@@ -185,7 +223,6 @@ function onSubmit(url) {
     sendAjaxQuery(url, data);
     event.preventDefault();
 }
-
 function gohome()
 {
     window.location.href=".."

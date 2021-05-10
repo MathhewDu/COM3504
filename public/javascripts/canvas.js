@@ -21,6 +21,7 @@ function initCanvas(sckt, imageUrl) {
     let cvx = document.getElementById('canvas');
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     img.src = imageUrl;
     userId = document.getElementById('name').value;
     // event on the canvas when the mouse is on it
