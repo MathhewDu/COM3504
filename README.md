@@ -5,15 +5,20 @@
 3. open chrome with     http://localhost:3000/
 
 
-for now, we've inplemented: 
-chatroom, Synchronous drawing，saving annotation in IndexDB.
+For now, we've inplemented: 
+
+Most of the functions of the web app, but not working both offline because we encountered a blockage when using serviceWorker.
+NodeJS server.
+MongoDB.
+Client/server communication.
+Connection to the knowledge graph(Not fully achieved).
 
 
-MongoDB can connect secceefully, but without too many storage functions now. 
-we will inplement later(including store author and upload picture data in it.for now,
-the picture data which from uploading is store in IndexDB. )
 
 Task allocation:
+
 Chencheng Du: IndexDB, Ajax communication, annotation, Swagger documentation
+
 Tianyi Zhang:socket.io, service worker, drawing annotation
+
 Yuyang Zhang: MongoDB, nodeJS server, CSS render.

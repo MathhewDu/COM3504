@@ -22,35 +22,25 @@
     }
   ],
   "paths": {
-    "/": {
+    "/doAdd": {
       "post": {
         "tags": [
-          "Exchange information using images and text"
+          "Upload image to server"
         ],
-        "description": "information is in the form of images and annotations",
-        "operationId": "image data",
+        "description": "require author, title, description, and image file which in upForm object.",
+        "operationId": "image upload",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/imageObject"
+                "$ref": "#/components/schemas/upForm"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "Correct input of Child structure",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/imageObject"
-                }
-              }
-            }
-          },
-          "403": {
+          "500": {
             "description": "Missing parameters",
             "content": {
               "application/json": {
@@ -149,6 +139,35 @@
         "type": "integer",
         "description": "the pen thickness",
         "example": 4
+      },
+      "picBase64": {
+        "type": "string",
+        "description": "the base64 for image",
+        "example": "\\"
+      },
+      "upForm": {
+        "type": "object",
+        "properties": {
+          "picBase64": {
+            "$ref": "#/components/schemas/picBase64"
+          },
+          "title": {
+            "$ref": "#/components/schemas/title"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          },
+          "author": {
+            "$ref": "#/components/schemas/author"
+          }
+        },
+        "description": "image upload form",
+        "example": {
+          "picBase64": "/9j/4AAQSkZJRgABAQEAYAB",
+          "title": "sample",
+          "description": "a sample image with part of base64",
+          "author": "John"
+        }
       },
       "imageObject": {
         "type": "object",
