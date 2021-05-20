@@ -3,13 +3,13 @@ var dataCacheName = 'chatroom-cache-v1';
 var cacheName = 'chatroom-step-8-1';
 var filesToCache = [
     '/',
-    '/javascripts/app.js',
+    // '/javascripts/app.js',
     '/stylesheets/style.css',
-    '/javascripts/idb/index.js',
-    '/javascripts/idb/wrap-idb-value.js',
+    // '/javascripts/idb/index.js',
+    // '/javascripts/idb/wrap-idb-value.js',
     '/javascripts/canvas.js',
-    '/javascripts/database.js',
-    '/javascripts/index.js',
+    // '/javascripts/database.js',
+    // '/javascripts/index.js',
 ];
 
 /**
@@ -47,31 +47,13 @@ self.addEventListener('activate', function(event){
  * fetch: when the worker receives a fetch request
  **/
 
-self.addEventListener('fetch',function(event){
-    console.log('[ServiceWorker] Fetch', event.request.url);
-    var dataUrl = '/';
-    if(event.request.url.indexOf(dataUrl) > -1){
-        return fetch(event.request).then(function (response){
-            return response;
-        }).catch(function(err){
-            console.log("service worker error:  "+err.message);
+self.addEventListener('fetch', function(event){
+    event.respondWith(
+        fetch(event.request).catch(function(){
+            return caches.match(event.request);
         })
-    }else{
-        event.respondWith(async function(){
-            const cache = await caches.open('chatroom');
-            const cachedResponse = await cache.match(event.request);
-            const networkResponsePromise = fetch(event.request);
-
-            event.waitUntil(async function(){
-                const networkResponse = await networkResponsePromise;
-                await cache.put(event.request, networkResponse.clone());
-            }());
-
-            return cachedResponse || networkResponsePromise;
-        }());
-    }
+    )
 });
-
 
 // self.addEventListener('fetch', function(event){
 //     console.log('[ServiceWorker] Fetch', event.request.url);
