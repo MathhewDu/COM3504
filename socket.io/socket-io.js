@@ -21,6 +21,9 @@ exports.init = function(io) {
         io.sockets.to(room).emit('draw', room, userId, width, height, prevX, prevY, currX, currY, color, thickness);
         //console.log(room,userId);
       });
+      socket.on('knowledge graph', function (room, name, id, desc, url){
+        socket.broadcast.to(room).emit('knowledgegraph', room, name, id, desc, url);
+      });
     } catch (e) {
     }
   });

@@ -22,7 +22,7 @@ function init() {
             .register('./service-worker.js')
             .then(function() { console.log('Service Worker Registered'); });
     }
-    loadData(false);
+    //loadData(false);
 
 
 }
@@ -55,12 +55,17 @@ function widgetInit(){
 
 function selectItem(event){
     let row= event.row;
+    room = document.getElementById('roomNo').value;
+
+    resultPanel(row.name, row.id, row.rc, row.qc);
+    socket.emit('knowledge graph', room, row.name, row.id, row.rc, row.qc);
+
     //document.getElementById('resultImage').src= row.json.image.url;
-    document.getElementById('resultId').innerText= 'id: '+row.id;
-    document.getElementById('resultName').innerText= row.name;
-    document.getElementById('resultDescription').innerText= row.rc;
-    document.getElementById("resultUrl").href= row.qc;
-    document.getElementById('resultPanel').style.display= 'block';
+    // document.getElementById('resultId').innerText= 'id: '+row.id;
+    // document.getElementById('resultName').innerText= row.name;
+    // document.getElementById('resultDescription').innerText= row.rc;
+    // document.getElementById("resultUrl").href= row.qc;
+    // document.getElementById('resultPanel').style.display= 'block';
     //document.getElementById('resultPanel').innerHTML= '<PRE>'+JSON.stringify(row, null, 4)+'</PRE>';
 
 }
@@ -85,6 +90,21 @@ function initSocket(){
         writeOnHistory('<b>' + who + ':</b> ' + chatText);
     });
 
+    socket.on('knowledgegraph', function(name, id, desc, url){
+        resultPanel(name,id,desc,url).then(r=>{})
+    });
+
+}
+
+function resultPanel(resultname, resultId, desc, url){
+    let panel = document.getElementById('resultPanel');
+    let results = document.createElement('div');
+    results.className = 'resultPanel';
+    results.innerHTML = '<h2>' + resultname + '</h2>' +
+        '<h4>' + resultId + '</h4>' +
+        '<div>' + desc + '</div><div><a href='+ url + '>Link to Webpage</a></div>';
+    panel.appendChild(results);
+    panel.style.display = 'block';
 }
 
 /**
