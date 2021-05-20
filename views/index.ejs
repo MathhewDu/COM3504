@@ -102,15 +102,15 @@
     </div>
     <!--    </div>-->
 
-
-    <div class="myRow" id="widget">
-        <label for="myInput">Search for </label><input type="text" id="myInput">
-
-    </div>
+    <h3>search knowledge graph</h3>
     <div class="myRow" id="typeForm">
-        <label for="myType"> of type</label><input type="text" id="myType">
+        <label for="myType">Type: </label><input type="text" id="myType">
+        <button onclick="widgetInit()">Set type</button>
     </div>
-
+    <div class="myRow" id='widget' style="display: none">
+        <label for="myInput">Search for: </label><input type="text" id="myInput">
+        <div class="myRow" id="typeSet"></div>
+    </div>
     <div>
         <div class='resultPanel' id="resultPanel" style="display: none">
             <h2 id="resultName"></h2>
