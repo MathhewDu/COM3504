@@ -40,7 +40,7 @@
           "required": true
         },
         "responses": {
-          "403": {
+          "500": {
             "description": "Missing parameters",
             "content": {
               "application/json": {
