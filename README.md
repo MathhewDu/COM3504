@@ -7,13 +7,13 @@
 
 For now, we've inplemented: 
 
-Most of the functions of the web app, but not working both offline because we encountered a blockage when using serviceWorker.
-NodeJS server.
-MongoDB.
+Most of the functions of the web app,
+NodeJS server,
+MongoDB,
 Client/server communication.
 Connection to the knowledge graph(Not fully achieved).
 
-
+For UPload Image function: After uploading an Image, the website should be refreshed to view the new adding(not-auto).
 
 Task allocation:
 
