@@ -24,4 +24,4 @@ Tianyi Zhang:socket.io, service worker, drawing annotation
 Yuyang Zhang: MongoDB, nodeJS server, CSS render.
 
 
-<!--A revised version of Part1 code is already included as assignment_partI.zip.-->
+Furthermore, a revised version of Part1 code is already included as assignment_partI.zip.
