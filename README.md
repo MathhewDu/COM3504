@@ -14,6 +14,6 @@ we will inplement later(including store author and upload picture data in it.for
 the picture data which from uploading is store in IndexDB. )
 
 Task allocation:
-Chencheng Du: IndexDB, Ajax communication, annotation
+Chencheng Du: IndexDB, Ajax communication, annotation, Swagger documentation
 Tianyi Zhang:socket.io, service worker, drawing annotation
 Yuyang Zhang: MongoDB, nodeJS server, CSS render.
