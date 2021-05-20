@@ -9,12 +9,10 @@ For now, we've inplemented:
 
 Most of the functions of the web app, but not working both offline because we encountered a blockage when using serviceWorker.
 NodeJS server.
-
 MongoDB.
-
 Client/server communication.
-
 Connection to the knowledge graph(Not fully achieved).
+
 
 
 Task allocation:
